@@ -1,7 +1,7 @@
 // Copyright Eveline Gomes.
 
 
-#include "AuraCharacterBase.h"
+#include "Character/AuraCharacterBase.h"
 
 
 void AAuraCharacterBase::BeginPlay()
