@@ -3,6 +3,9 @@
 
 #include "Player/AuraPlayerController.h"
 
+#include "EnhancedInputSubsystems.h"
+
+
 void AAuraPlayerController::BeginPlay()
 {
    Super::BeginPlay();
@@ -18,7 +21,21 @@ void AAuraPlayerController::BeginPlay()
    */
    check(AuraContext);
 
+   /** 
+   * For adding an IMC, we need to get access to the Enhanced Input Local Player subsystem. We can get a pointer of this type, and set it 
+   *  through a static function that belongs to ULocalPlayer class.
+   * Subsystems are singletons, meaning it exists only ONE for the duration of the program!
+   * Instead of using an if to check if Subsystem is valid, we'll use an assertion again like we did with AuraContext. The difference between
+   *  using if and an assertion is that we'll get a crash if Subsystem is null.
+   * https://dev.epicgames.com/documentation/en-us/unreal-engine/asserts-in-unreal-engine?application_version=5.3
+   * 
+   * Then, we proceed to add the IMC. Since we only have one, we'll have priority as 0.
+   */
 
+   UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+   check(Subsystem);
+   Subsystem->AddMappingContext(AuraContext, 0);
+   
 }
 
 AAuraPlayerController::AAuraPlayerController()
