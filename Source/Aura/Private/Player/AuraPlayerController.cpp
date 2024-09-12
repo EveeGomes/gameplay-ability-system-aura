@@ -35,6 +35,23 @@ void AAuraPlayerController::BeginPlay()
    UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
    check(Subsystem);
    Subsystem->AddMappingContext(AuraContext, 0);
+
+   /** 
+   * There are some settings that player controller has control over, that we can set here in BeginPlay(). Some examples are: showing the
+   *  mouse cursor, set the input mode etc.
+   */
+   // In this Top Down we want to see our cursor!
+   bShowMouseCursor = true;
+   // Set it using an enum with many different cursors
+   DefaultMouseCursor = EMouseCursor::Default;
+
+   // Set input mode using the following struct which allows for using input from the keyboard, mouse, and use input to affect UI like widgets!
+   FInputModeGameAndUI InputModeData;
+   // Configure it:
+   InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); // won't lock the mouse to the viewport
+   InputModeData.SetHideCursorDuringCapture(false); // won't hide the cursor as soons as it's captured into the viewport
+   // Now, in order to use this InputModeData, use a player controller function to set it:
+   SetInputMode(InputModeData);
    
 }
 
