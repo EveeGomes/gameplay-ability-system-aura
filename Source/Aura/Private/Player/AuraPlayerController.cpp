@@ -72,12 +72,16 @@ void AAuraPlayerController::SetupInputComponent()
    * Instead of doing a Cast and then checking the pointer or using an assert like we did in BeginPlay(), we'll use CastChecked<>() which does
    *  both things at one go! So, if the cast fails we'll get a crash.
    * 
-   * With the EnhancedInputComponent we can now bind an InputAction (IA) to it.
+   * With the EnhancedInputComponent we can now bind an InputAction (IA) to it, and then bind callback functions that will use the data coming
+   *  from the IA (eg. when the player presses WASD MoveAction is filled with data according to how we've configured our IMC). Move() will accept
+   *  the data coming as an InputActionValue type and use it as needed.
    */
 
    Super::SetupInputComponent();
 
    UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+
+   EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
 }
 
 AAuraPlayerController::AAuraPlayerController()
