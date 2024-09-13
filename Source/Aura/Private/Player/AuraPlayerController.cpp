@@ -9,6 +9,31 @@
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+   /** 
+   * Since our Move Input Action is an axis 2D type, we can retrieve the X and Y axes data from it.
+   * We use the Get<>() function which is a template function that allows us to get the value in the form we need it in.
+   * Once we have a FVector2D extracted from the InputActionValue, we can access the X and Y axes to add movement input.
+   * ie: add movement to our controlled pawn in the forward direction and right direction, based on those axes values.
+   * 
+   * We need to find out which direction is forward for us, and we need to do that based on our controller, because the controller
+   *  is pointed basically in the direction from the camera to the character (parellel to the ground).
+   * So, we can access the controller rotation to zero out the pitch(y) and roll(x), and have the yaw(z) value for our controller rotation.
+   * If we convert that to a vector, then we can consider that as forward as far as WASD keys are concerned!
+   * We do all that to have a rotation we can use to get a forward vector from. And we do that by using an FRotationMatrix that we initialize
+   *  with the FRotator we created and then call a GetUnitAxis passing the X axis that gives us the forward axis!
+   * We can do the same but passing the Y axis to get the right axis, which gives us the right direction!
+   * 
+   * These values are normalized, as GetUnitAxis returns a unit vector which has a length of one.
+   */
+
+   // Retrieve data from InputActionValue
+   const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
+
+   // Get a forward direction vector, and right direction vector
+   const FRotator Rotation = GetControlRotation();
+   const FRotator YawRotation{ 0., Rotation.Yaw, 0. };
+   const FVector ForwardDirection = FRotationMatrix{ YawRotation }.GetUnitAxis(EAxis::X);
+   const FVector RightDirection = FRotationMatrix{ YawRotation }.GetUnitAxis(EAxis::Y);
 }
 
 void AAuraPlayerController::BeginPlay()
