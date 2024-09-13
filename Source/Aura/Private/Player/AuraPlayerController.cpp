@@ -24,6 +24,22 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
    * We can do the same but passing the Y axis to get the right axis, which gives us the right direction!
    * 
    * These values are normalized, as GetUnitAxis returns a unit vector which has a length of one.
+   * 
+   * FROM CHATGPT:
+   * Why Use This?
+   * You're using this to move or determine directions in the world based on where the player is looking. By isolating the yaw component, 
+   *  you ensure that "forward" and "right" are always relative to the player's view, without the complications of looking up or down (pitch) 
+   *  or tilting (roll). 
+   *  This helps make movement controls feel intuitive and consistent with the camera orientation.
+   * 
+   * Once we have those directions, we can add movement input to the controlled pawn.
+   * To get the controlled pawn by this player controller class, we'll wrap the code in a if statement because Move is pottentially called 
+   *  every frame and it might be too early before the controlled pawn is valid.
+   * The AddMovementInput() needs a world direction and a scale value to change the world direction accordingly. We already receive that
+   *  scale value from the InputActionValue, eg if we press W it'll be positive 1 but if we press S it'll be negative 1, and these keys
+   *  correspond to data in the Y axis. So, all we have to do is pass the InputAxisVector.Y for scaling the forward direction. 
+   *  Similarly, for adding right and left movement, we'll use the RightDirection and scale it by the InputAxisVector.X since the A and D
+   *  keys are associated with the right and left.
    */
 
    // Retrieve data from InputActionValue
@@ -34,6 +50,13 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
    const FRotator YawRotation{ 0., Rotation.Yaw, 0. };
    const FVector ForwardDirection = FRotationMatrix{ YawRotation }.GetUnitAxis(EAxis::X);
    const FVector RightDirection = FRotationMatrix{ YawRotation }.GetUnitAxis(EAxis::Y);
+
+   // Add movement input to the controlled pawn
+   if (APawn* ControlledPawn = GetPawn<APawn>())
+   {
+      ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+      ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+   }
 }
 
 void AAuraPlayerController::BeginPlay()
