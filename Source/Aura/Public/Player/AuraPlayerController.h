@@ -7,6 +7,8 @@
 #include "AuraPlayerController.generated.h"
 
 class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
 
 /**
  * 
@@ -23,6 +25,14 @@ class AURA_API AAuraPlayerController : public APlayerController
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
+
+	/** Input Actions */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> MoveAction;
+
+	/** Input Actions Callback Functions */
+	// Since MoveAction is an IA that provides data, this function must have an input parameter of type FInputActionValue (forward declared struct)
+	void Move(const FInputActionValue& InputActionValue);
 
 protected:
 	virtual void BeginPlay() override;

@@ -7,6 +7,10 @@
 #include "EnhancedInputComponent.h"
 
 
+void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
+{
+}
+
 void AAuraPlayerController::BeginPlay()
 {
    Super::BeginPlay();
@@ -67,6 +71,8 @@ void AAuraPlayerController::SetupInputComponent()
    *  stores the address of an object of UEnhancedInputComponent type. For that we need to cast the InputComponent to UEnhancedInputComponent.
    * Instead of doing a Cast and then checking the pointer or using an assert like we did in BeginPlay(), we'll use CastChecked<>() which does
    *  both things at one go! So, if the cast fails we'll get a crash.
+   * 
+   * With the EnhancedInputComponent we can now bind an InputAction (IA) to it.
    */
 
    Super::SetupInputComponent();
