@@ -26,6 +26,7 @@ private:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
 
 public:
 	AAuraPlayerController();
