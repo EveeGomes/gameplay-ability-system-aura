@@ -116,7 +116,10 @@ void AAuraPlayerController::SetupInputComponent()
    * This is where we can retrieve data.
    * We need to bind functions to the IA we created.
    * First we access a member variable of player controller class: InputComponent which is a pointer of type UInputComponent, but
-   *  stores the address of an object of UEnhancedInputComponent type. For that we need to cast the InputComponent to UEnhancedInputComponent.
+   *  stores the address of an object of UEnhancedInputComponent type (we know that by going to the Editor > Project Settings > Under Engine 
+   *  select Input, than under Default Classes we see the Default Input Component Class is set to EnhancedInputcomponent. This is where we 
+   *  things up. If we wanted our custom EnhancedInput class, we'd set that class to make sure our project uses that as the input component). 
+   *  For that we need to cast the InputComponent to UEnhancedInputComponent.
    * Instead of doing a Cast and then checking the pointer or using an assert like we did in BeginPlay(), we'll use CastChecked<>() which does
    *  both things at one go! So, if the cast fails we'll get a crash.
    * 
