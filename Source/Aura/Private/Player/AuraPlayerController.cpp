@@ -131,7 +131,7 @@ void AAuraPlayerController::CursorTrace()
          }
          else
          {
-            // Case E
+            // Case E - do nothing
          }
       }
    }
