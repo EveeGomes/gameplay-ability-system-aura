@@ -9,6 +9,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class IEnemyInterface;
 
 /**
  * 
@@ -23,6 +24,14 @@ class AURA_API AAuraPlayerController : public APlayerController
 	*/	
 
 private:
+	/** 
+	* Pointers to use in CursorTrace().
+	* The right way to hold a member variable to an interface is by using a template wrapper designed to hold interfaces:
+	*  TScriptInterface<> ; We should use that instead of raw pointers.
+	*/
+	TScriptInterface<IEnemyInterface> LastActor;
+	TScriptInterface<IEnemyInterface> ThisActor;
+
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
 
@@ -33,6 +42,9 @@ private:
 	/** Input Actions Callback Functions */
 	// Since MoveAction is an IA that provides data, this function must have an input parameter of type FInputActionValue (forward declared struct)
 	void Move(const FInputActionValue& InputActionValue);
+
+	// Trace under the cursor
+	void CursorTrace();
 
 protected:
 	virtual void BeginPlay() override;

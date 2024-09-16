@@ -3,8 +3,12 @@
 
 #include "Player/AuraPlayerController.h"
 
+/** Input */
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+
+/** Interfaces */
+#include "Interaction/EnemyInterface.h"
 
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -59,6 +63,80 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
    }
 }
 
+void AAuraPlayerController::CursorTrace()
+{
+   /** 
+   * Get the hit result under the cursor. This is something that the PlayerController class inheritly has the ability to do.
+   * We'll call a method that do that and takes a trace channel, which we'll pass the visibility channel. The bTraceComplex will be
+   *  set to false since we want to trace against simple collision only.
+   * To avoid logic being nested like:
+   *  if (CursorHit.bBlockingHit) { //... }
+   *  we'll do: if (!CursorHit.bBlockingHit) return;
+   *  and then we continue with the code below it.
+   * 
+   * Now, we'll use the hit result to see if what was hit implements the EnemyInterface, by casting it to a EnemyInterface.
+   *  If the cast fails it'll return a nullptr, if succeeds it returns a valid enemy. And we'll use these information!
+   * We'll create 2 pointers: one to hold the actor we hovered over previous frame, and a second to hold the actor hovered over in current frame.
+   * Since we're using TScriptInterface, we don't need to perform the cast, we can simply pass the get actor to the pointer directly!
+   * 
+   * There are many scenarios we need to take care of when we do the Line Trace from cursor:
+   * A. LastActor is null && ThisActor is null
+   *     - Do nothing.
+   * B. LastActor is null && ThisActor is valid
+   *     - Highlight ThisActor.
+   * C. LastActor is valid && ThisActor is null
+   * (we've hovered over a valid actor last frame, but this frame we hover a non valid, so we should unhighlight LastActor!)
+   *     - Unhighlight LastActor.
+   * D. Both actors are valid, but LastActor != ThisActor
+   * (we're hovering over different enemies: last frame: 1 enemy, this frame: a different enemy. Meaning, LastEnemy should be unhighlighted,
+   *  while ThisActor should be highlighted)
+   *     - Unhighlight LastActor, and Highlight ThisActor.
+   * E. Both actors are valid, and are the same actor
+   *     - Do nothing.
+   */
+   FHitResult CursorHit;
+   GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+   if (!CursorHit.bBlockingHit) return;
+
+   LastActor = ThisActor;
+   ThisActor = CursorHit.GetActor();
+
+   if (LastActor == nullptr) // explicitly stating if that pointer is null
+   {
+      if (ThisActor != nullptr)
+      {
+         // Case B
+         ThisActor->HighlightActor();
+      }
+      else
+      {
+         // Case A - both are null, do nothing
+         // unnecessary else, but here to make it easier to visualize and understand at first
+      }
+   }
+   else // LastActor is valid
+   {
+      if (ThisActor == nullptr)
+      {
+         // Case C
+         LastActor->UnHighlihtActor();
+      }
+      else // both actors are valid
+      {
+         if (LastActor != ThisActor)
+         {
+            // Case D
+            LastActor->UnHighlihtActor();
+            ThisActor->HighlightActor();
+         }
+         else
+         {
+            // Case E
+         }
+      }
+   }
+}
+
 void AAuraPlayerController::BeginPlay()
 {
    Super::BeginPlay();
@@ -106,8 +184,7 @@ void AAuraPlayerController::BeginPlay()
    InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); // won't lock the mouse to the viewport
    InputModeData.SetHideCursorDuringCapture(false); // won't hide the cursor as soons as it's captured into the viewport
    // Now, in order to use this InputModeData, use a player controller function to set it:
-   SetInputMode(InputModeData);
-   
+   SetInputMode(InputModeData);  
 }
 
 void AAuraPlayerController::SetupInputComponent()
@@ -145,8 +222,9 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
    /** 
    * Perform the trace and handle the highlighting of any actor we hit that implements EnemyInterface.
-   * For that, we'll make a function to call it here.
+   * For that, we'll call CursorTrace().
    */
 
    Super::PlayerTick(DeltaTime);
+   CursorTrace();
 }
