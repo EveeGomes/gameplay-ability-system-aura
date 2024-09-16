@@ -140,3 +140,13 @@ AAuraPlayerController::AAuraPlayerController()
    /** Changes will be sent to all clients in the same server. It'll be addressed better later.*/
    bReplicates = true;
 }
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+   /** 
+   * Perform the trace and handle the highlighting of any actor we hit that implements EnemyInterface.
+   * For that, we'll make a function to call it here.
+   */
+
+   Super::PlayerTick(DeltaTime);
+}

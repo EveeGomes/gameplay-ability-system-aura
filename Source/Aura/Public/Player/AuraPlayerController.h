@@ -41,4 +41,9 @@ protected:
 public:
 	AAuraPlayerController();
 
+	/** 
+	* Check which actor implements the EnemyInterface. Since it's not an expensive operation and we need some responsiveness when hovering the 
+	*  mouse cursor over many different actors, we'll implement this in the Tick function. Therefore, we have to override the PlayerTick method.
+	*/
+	virtual void PlayerTick(float DeltaTime) override;
 };
