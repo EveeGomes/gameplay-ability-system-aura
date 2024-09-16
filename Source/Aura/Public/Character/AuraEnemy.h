@@ -21,5 +21,10 @@ public:
 	virtual void UnHighlihtActor() override;
 	/** </IEnemyInterface> */
 
+	
+	UPROPERTY(BlueprintReadOnly) // Also, we can do this in BP for debugging Highlight and Unhighlight methods 
+	bool Highlighted = false;
 
+	virtual void Tick(float DeltaTime) override;
+	AAuraEnemy();
 };

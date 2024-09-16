@@ -65,6 +65,7 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
+
    /** 
    * Get the hit result under the cursor. This is something that the PlayerController class inheritly has the ability to do.
    * We'll call a method that do that and takes a trace channel, which we'll pass the visibility channel. The bTraceComplex will be
@@ -227,4 +228,6 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 
    Super::PlayerTick(DeltaTime);
    CursorTrace();
+
+
 }
