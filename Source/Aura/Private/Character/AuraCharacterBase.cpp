@@ -3,7 +3,6 @@
 
 #include "Character/AuraCharacterBase.h"
 
-
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
