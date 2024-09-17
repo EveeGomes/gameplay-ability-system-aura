@@ -3,23 +3,20 @@
 
 #include "Character/AuraEnemy.h"
 
-#include "DrawDebugHelpers.h"
+#include "Aura/Aura.h"
 
 void AAuraEnemy::HighlightActor()
 {
-   Highlighted = true;
-
    // Set Render Custom Depth so the mesh uses the material we've added to the post process volume
    GetMesh()->SetRenderCustomDepth(true);
-   GetMesh()->SetCustomDepthStencilValue(250);
+   GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED); // once we set it, we don't need to set it again so it's a redundent operation (but it's cheap so we'll leave it)
    Weapon->SetRenderCustomDepth(true);
-   Weapon->SetCustomDepthStencilValue(250);
+   Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 
 }
 
 void AAuraEnemy::UnHighlihtActor()
 {
-   Highlighted = false;
    GetMesh()->SetRenderCustomDepth(false);
    Weapon->SetRenderCustomDepth(false);
 }
