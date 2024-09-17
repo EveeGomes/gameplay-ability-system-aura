@@ -6,6 +6,10 @@
 /** Macros */
 #include "Aura/Aura.h"
 
+/** GAS classes */
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
+
 AAuraEnemy::AAuraEnemy()
 {
    PrimaryActorTick.bCanEverTick = true;
@@ -13,6 +17,13 @@ AAuraEnemy::AAuraEnemy()
    // Set the collision response for the mesh
    GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
+   // Construct AuraAbilitySystemComponent
+   AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+   // Make sure it is replicated
+   AbilitySystemComponent->SetIsReplicated(true);
+
+   // Construct AttributeSet
+   AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 
 void AAuraEnemy::HighlightActor()
