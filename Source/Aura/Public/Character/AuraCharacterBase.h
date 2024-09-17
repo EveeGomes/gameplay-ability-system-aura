@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "AuraCharacterBase.generated.h"
 
+/** Forward Declaration */
+class UAbilitySystemComponent;
+class UAttributeSet;
+
 UCLASS(Abstract)
 class AURA_API AAuraCharacterBase : public ACharacter
 {
@@ -14,8 +18,6 @@ class AURA_API AAuraCharacterBase : public ACharacter
 private:
 
 protected:
-	virtual void BeginPlay() override;
-
 	/** 
 	* Add a Skeletal Mesh component to this base class so both children can inheret and both can have a weapon.
 	* This weapon will be attached to the socket on the skeleton, therefore we need to make sure the skeleton meshes 
@@ -35,6 +37,18 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
+	/** 
+	* Add pointers to store the AbilitySystemComponent and AttributeSet in this Base class for all children inheret them. However, not all
+	*  children will construct them. For example we'll construct and own those in the enemy class, but for the playe controlled character
+	*  those will be owned by the PlayerState! 
+	*/
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> AttributeSet;
+
+	virtual void BeginPlay() override;
 public:	
 	AAuraCharacterBase();
 
