@@ -8,25 +8,25 @@
 void AAuraEnemy::HighlightActor()
 {
    Highlighted = true;
+
+   // Set Render Custom Depth so the mesh uses the material we've added to the post process volume
+   GetMesh()->SetRenderCustomDepth(true);
+   GetMesh()->SetCustomDepthStencilValue(250);
+   Weapon->SetRenderCustomDepth(true);
+   Weapon->SetCustomDepthStencilValue(250);
+
 }
 
 void AAuraEnemy::UnHighlihtActor()
 {
    Highlighted = false;
+   GetMesh()->SetRenderCustomDepth(false);
+   Weapon->SetRenderCustomDepth(false);
 }
 
 void AAuraEnemy::Tick(float DeltaTime)
 {
    Super::Tick(DeltaTime);
-
-   if (Highlighted)
-   {
-      UWorld* World = GetWorld();
-      if (World)
-      {
-         DrawDebugSphere(World, GetActorLocation(), 50.f, 15, FColor::Red);
-      }
-   }
 }
 
 AAuraEnemy::AAuraEnemy()
