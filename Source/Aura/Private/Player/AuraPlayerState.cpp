@@ -16,6 +16,17 @@ AAuraPlayerState::AAuraPlayerState()
    AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
    // Make sure it is replicated
    AbilitySystemComponent->SetIsReplicated(true);
+   /** 
+   * Gameplay Effects are used to change attributes values, i.e we use them to cause damage, or heal the player. So if those changes happen
+   *  on the server, the client should know about it, the client would like to show in the HUD etc.
+   * 
+   * The replication mode determines how these gameplay effects will be replicated. There are 3 modes: full, mixed and minimal.
+   * Full -> replicate gameplay effects to all clients (use case: single player).
+   * Mixed -> replicates only to the owning client, but gameplay cues and tags are replicated to all clients (multiplayer, player-controlled).
+   * Minimal -> won't replicate effects, but gameplay cues and tags are replicated to all clients (multiplayer, AI-controlled).
+   */
+   // Set replication mode for this component
+   AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
    // Construct AttributeSet
    AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
