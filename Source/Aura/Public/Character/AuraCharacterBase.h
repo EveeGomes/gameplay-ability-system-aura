@@ -13,6 +13,11 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 
+
+/** 
+* Adding IAbilitySystemInterface will allow us to check any actor to see if they have this interface, so we can use the overriden
+*  function to get that actor's ability system component!
+*/
 UCLASS(Abstract)
 class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
@@ -55,6 +60,6 @@ protected:
 public:	
 	AAuraCharacterBase();
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
-
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 };
