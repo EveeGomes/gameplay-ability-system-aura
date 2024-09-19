@@ -10,6 +10,21 @@
 #include "Player/AuraPlayerState.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 
+void AAuraCharacter::InitAbilityActorInfo()
+{
+   // Get the Player State
+   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+   // Use assert instead of if statement
+   check(AuraPlayerState);
+   // Tell ASC who are the Owner Actor, and Avatar Actor
+   AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+
+   // Set ASC. That pointer (and AttributeSet) are defined in AuraCharacterBase!
+   AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+   // Also set the AttributeSet
+   AttributeSet = AuraPlayerState->GetAttributeSet();
+}
+
 AAuraCharacter::AAuraCharacter()
 {
    /** 
@@ -34,29 +49,12 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 {
    Super::PossessedBy(NewController);
 
-   // Get the Player State
-   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-   // Use assert instead of if statement
-   check(AuraPlayerState);
-   // Tell ASC who are the Owner Actor, and Avatar Actor
-   AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-   
-   // Set ASC on the Server. That pointer is defined in AuraCharacterBase!
-   AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-   // Also set the AttributeSet
-   AttributeSet = AuraPlayerState->GetAttributeSet();
+   InitAbilityActorInfo();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
 {
    Super::OnRep_PlayerState();
 
-   // Do the same as in possessedBy()!!!
-
-   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-   if (AuraPlayerState)
-   {
-      AbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent());
-      AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-   }
+   InitAbilityActorInfo();
 }
