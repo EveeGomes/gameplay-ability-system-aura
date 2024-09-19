@@ -37,9 +37,14 @@ public:
 	// Register variables for replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	/** Attributes */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
+	FGameplayAttributeData MaxHealth;
+
 	/** OnRep functions */
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 };
