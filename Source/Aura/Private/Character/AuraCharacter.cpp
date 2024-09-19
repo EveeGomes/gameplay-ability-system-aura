@@ -12,16 +12,13 @@
 
 void AAuraCharacter::InitAbilityActorInfo()
 {
-   // Get the Player State
    AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-   // Use assert instead of if statement
    check(AuraPlayerState);
    // Tell ASC who are the Owner Actor, and Avatar Actor
    AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
 
-   // Set ASC. That pointer (and AttributeSet) are defined in AuraCharacterBase!
+   // Set ASC and AttributeSet pointers
    AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-   // Also set the AttributeSet
    AttributeSet = AuraPlayerState->GetAttributeSet();
 }
 
