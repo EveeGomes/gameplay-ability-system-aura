@@ -29,8 +29,14 @@ public:
 	* 
 	* Once we set an OnRep notify to a replicated attribute, we must inform the Ability System of that change so it can bookkeep the changes and make
 	*  sure the whole AS is working cohesively.
+	* 
+	* There's another step that must be done in order to register a variable for replication: override a function where we register variables for
+	*  replication!
 	*/
 	
+	// Register variables for replication
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UPROPERTY(ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
 
