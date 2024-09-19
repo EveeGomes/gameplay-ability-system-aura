@@ -15,6 +15,10 @@ UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	AAuraEnemy();
 	/** <IEnemyInterface> */
@@ -23,5 +27,5 @@ public:
 	/** </IEnemyInterface> */
 
 	virtual void Tick(float DeltaTime) override;
-	virtual void BeginPlay() override;
+
 };
