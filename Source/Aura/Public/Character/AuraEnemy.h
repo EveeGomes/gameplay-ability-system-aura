@@ -21,10 +21,10 @@ protected:
 
 public:
 	AAuraEnemy();
-	/** <IEnemyInterface> */
+	/** Being IEnemyInterface Interface */
 	virtual void HighlightActor() override;
 	virtual void UnHighlihtActor() override;
-	/** </IEnemyInterface> */
+	/** End IEnemyInterface Interface */
 
 	virtual void Tick(float DeltaTime) override;
 

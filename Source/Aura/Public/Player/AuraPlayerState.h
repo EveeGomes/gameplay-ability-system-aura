@@ -32,6 +32,10 @@ protected:
 public:
 	AAuraPlayerState();
 
+	// GETTERS:
+	/** Begin IAbilitySystemInterface Interface */
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	/** End IAbilitySystemInterface Interface */
+
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 };

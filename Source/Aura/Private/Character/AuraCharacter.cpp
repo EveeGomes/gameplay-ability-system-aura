@@ -14,7 +14,6 @@ AAuraCharacter::AAuraCharacter()
 {
    /** 
    * Setup parameters so this character behaves as we want/need it to. We'll use typical parameters for a Top Down game.
-   * 
    */
 
    GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -37,14 +36,15 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 
    // Get the Player State
    AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-   if (AuraPlayerState)
-   {
-      // Set ASC on the Server. That pointer is defined in AuraCharacterBase!
-      AbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent());
-
-      // Tell ASC who are the Owner Actor, and Avatar Actor
-      AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-   }
+   // Use assert instead of if statement
+   check(AuraPlayerState);
+   // Tell ASC who are the Owner Actor, and Avatar Actor
+   AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+   
+   // Set ASC on the Server. That pointer is defined in AuraCharacterBase!
+   AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+   // Also set the AttributeSet
+   AttributeSet = AuraPlayerState->GetAttributeSet();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
