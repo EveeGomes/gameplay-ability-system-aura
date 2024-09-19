@@ -49,3 +49,9 @@ void AAuraEnemy::Tick(float DeltaTime)
 {
    Super::Tick(DeltaTime);
 }
+
+void AAuraEnemy::BeginPlay()
+{
+   // Initialize Actor Info
+   AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}

@@ -16,4 +16,11 @@ class AURA_API AAuraCharacter : public AAuraCharacterBase
 
 public:
 	AAuraCharacter();
+
+	/** <APawn> */
+	// Server
+	virtual void PossessedBy(AController* NewController) override;
+	// Client
+	virtual void OnRep_PlayerState() override;
+	/** </APawn> */
 };

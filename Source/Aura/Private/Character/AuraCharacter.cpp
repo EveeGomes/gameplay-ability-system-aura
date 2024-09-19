@@ -6,6 +6,10 @@
 /** Components */
 #include "GameFramework/CharacterMovementComponent.h"
 
+/** Setting up ASC */
+#include "Player/AuraPlayerState.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+
 AAuraCharacter::AAuraCharacter()
 {
    /** 
@@ -25,4 +29,34 @@ AAuraCharacter::AAuraCharacter()
    bUseControllerRotationPitch = false;
    bUseControllerRotationRoll = false;
    bUseControllerRotationYaw = false;
+}
+
+void AAuraCharacter::PossessedBy(AController* NewController)
+{
+   Super::PossessedBy(NewController);
+
+   // Get the Player State
+   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+   if (AuraPlayerState)
+   {
+      // Set ASC on the Server. That pointer is defined in AuraCharacterBase!
+      AbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent());
+
+      // Tell ASC who are the Owner Actor, and Avatar Actor
+      AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+   }
+}
+
+void AAuraCharacter::OnRep_PlayerState()
+{
+   Super::OnRep_PlayerState();
+
+   // Do the same as in possessedBy()!!!
+
+   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+   if (AuraPlayerState)
+   {
+      AbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent());
+      AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+   }
 }
