@@ -35,5 +35,5 @@ public:
 	FGameplayAttributeData Health;
 
 	/** OnRep functions */
-	void OnRep_Health(const FGameplayAttributeData& OldHealth);
+	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 };
