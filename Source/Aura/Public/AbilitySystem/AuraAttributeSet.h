@@ -37,10 +37,19 @@ public:
 	// Register variables for replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	/**
+	* Since we haven't learned about Gameplay Effects yet, we'll use some functions to access the attributes to retrieve and/or set them.
+	* Note: we normally don't set them from code directly, but with gameplay effect!
+	*
+	* So, for getters and setters we can use some macros (Check them by checking the AttributeSet.h).
+	*/
+
 	/** Attributes */
 	// HEALTH
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
+	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UAuraAttributeSet, Health);
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
 	FGameplayAttributeData MaxHealth;
 
@@ -49,7 +58,6 @@ public:
 	FGameplayAttributeData Mana;
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
 	FGameplayAttributeData MaxMana;
-
 
 	/** OnRep functions */
 	UFUNCTION()
