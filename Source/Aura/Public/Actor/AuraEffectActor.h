@@ -23,10 +23,7 @@ public:
 	AAuraEffectActor();
 
 	/** 
-	* Create the overlap callback functions.
-	* The OnOverlap function must be a UFUNCTION, and must have specific parameters to make it bindeble to OnComponentBeginOverlap on the sphere!
-	* To find out those parameters, we need to go to the definition of the delegate we'll bind this callback function, which in the case of OnOverlap()
-	*  we'll seek the definition of OnComponentBeginOverlap.
+	* Overlap callback functions. They must be UFUNCTION() and are bound to their delegate in BeginPlay().
 	*/
 	UFUNCTION()
 	virtual void OnOverlap(
