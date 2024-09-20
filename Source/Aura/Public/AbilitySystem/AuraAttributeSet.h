@@ -4,7 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
+
+/** Components; Access to macros */
+#include "AbilitySystemComponent.h"
+
 #include "AuraAttributeSet.generated.h"
+
+#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
+ GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
+ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
+ GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
+ GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 /**
  * 
@@ -42,13 +52,19 @@ public:
 	* Note: we normally don't set them from code directly, but with gameplay effect!
 	*
 	* So, for getters and setters we can use some macros (Check them by checking the AttributeSet.h).
+	* 
+	* But, instead of writing all macros we need, we'll copy the definition from AttributeSet.h and paste it here right after the includes.
+	* That's yet another boilerplate code we'll add to this class.
+	* Therefore, if we need to say initialize an attribute, we can use the Init function defined by those macros in AttributeSet.h. We'd do
+	*  that in the constructor like: 
+	*  InitHealth(100.f);
 	*/
 
 	/** Attributes */
 	// HEALTH
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UAuraAttributeSet, Health);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
 	FGameplayAttributeData MaxHealth;

@@ -3,14 +3,12 @@
 
 #include "AbilitySystem/AuraAttributeSet.h"
 
-/** Components */
-#include "AbilitySystemComponent.h"
-
 /** Register variables for replication */
 #include "Net/UnrealNetwork.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+   InitHealth(100.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
