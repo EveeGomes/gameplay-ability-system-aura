@@ -20,10 +20,18 @@ AAuraEffectActor::AAuraEffectActor()
 
 }
 
+void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+}
+
 void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Bind OnOverlap to OnComponentBeginOverlap on our sphere.
+	// We'll use AddDynamic() since this is a dynamic multicast delegate
+	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::OnOverlap);
 }
 
 
