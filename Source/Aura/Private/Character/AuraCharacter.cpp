@@ -10,18 +10,6 @@
 #include "Player/AuraPlayerState.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 
-void AAuraCharacter::InitAbilityActorInfo()
-{
-   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-   check(AuraPlayerState);
-   // Tell ASC who are the Owner Actor, and Avatar Actor
-   AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-
-   // Set ASC and AttributeSet pointers
-   AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-   AttributeSet = AuraPlayerState->GetAttributeSet();
-}
-
 AAuraCharacter::AAuraCharacter()
 {
    /** 
@@ -54,4 +42,16 @@ void AAuraCharacter::OnRep_PlayerState()
    Super::OnRep_PlayerState();
 
    InitAbilityActorInfo();
+}
+
+void AAuraCharacter::InitAbilityActorInfo()
+{
+   AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+   check(AuraPlayerState);
+   // Tell ASC who are the Owner Actor, and Avatar Actor
+   AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+
+   // Set ASC and AttributeSet pointers
+   AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+   AttributeSet = AuraPlayerState->GetAttributeSet();
 }

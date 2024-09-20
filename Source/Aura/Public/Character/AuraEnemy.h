@@ -16,9 +16,6 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
-
 public:
 	AAuraEnemy();
 	/** Being IEnemyInterface Interface */
@@ -27,5 +24,8 @@ public:
 	/** End IEnemyInterface Interface */
 
 	virtual void Tick(float DeltaTime) override;
+
+protected:
+	virtual void BeginPlay() override;
 
 };

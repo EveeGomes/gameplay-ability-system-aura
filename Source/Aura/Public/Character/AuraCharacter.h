@@ -13,8 +13,6 @@ UCLASS()
 class AURA_API AAuraCharacter : public AAuraCharacterBase
 {
 	GENERATED_BODY()
-private:
-	void InitAbilityActorInfo();
 
 public:
 	AAuraCharacter();
@@ -25,4 +23,8 @@ public:
 	// Init ability actor info for the Client
 	virtual void OnRep_PlayerState() override;
 	/** End APawn Interface */
+
+private:
+	void InitAbilityActorInfo();
+
 };

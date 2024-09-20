@@ -22,8 +22,11 @@ UCLASS(Abstract)
 class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
+public:	
+	AAuraCharacterBase();
 
-private:
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 protected:
 	/** 
@@ -57,9 +60,5 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	virtual void BeginPlay() override;
-public:	
-	AAuraCharacterBase();
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 };

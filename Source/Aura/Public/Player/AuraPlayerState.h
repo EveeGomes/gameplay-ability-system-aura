@@ -19,6 +19,16 @@ class AURA_API AAuraPlayerState : public APlayerState, public IAbilitySystemInte
 {
 	GENERATED_BODY()
 
+public:
+	AAuraPlayerState();
+
+	// GETTERS:
+	/** Begin IAbilitySystemInterface Interface */
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	/** End IAbilitySystemInterface Interface */
+
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
 protected:
 	/** 
 	* Declare those pointers here since our player controlled character won't have them.
@@ -29,13 +39,4 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
-public:
-	AAuraPlayerState();
-
-	// GETTERS:
-	/** Begin IAbilitySystemInterface Interface */
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	/** End IAbilitySystemInterface Interface */
-
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 };

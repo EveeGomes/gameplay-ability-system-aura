@@ -10,14 +10,6 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 
-void AAuraEnemy::BeginPlay()
-{
-   Super::BeginPlay();
-
-   // Initialize Actor Info
-   AbilitySystemComponent->InitAbilityActorInfo(this, this);
-}
-
 AAuraEnemy::AAuraEnemy()
 {
    PrimaryActorTick.bCanEverTick = true;
@@ -56,4 +48,12 @@ void AAuraEnemy::UnHighlihtActor()
 void AAuraEnemy::Tick(float DeltaTime)
 {
    Super::Tick(DeltaTime);
+}
+
+void AAuraEnemy::BeginPlay()
+{
+   Super::BeginPlay();
+
+   // Initialize Actor Info
+   AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
