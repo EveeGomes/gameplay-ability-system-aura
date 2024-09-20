@@ -11,6 +11,9 @@
 * So we'll implement some overlap and then make modifications to attributes.
 */
 
+/** Forward Declarations */
+class USphereComponent;
+
 UCLASS()
 class AURA_API AAuraEffectActor : public AActor
 {
@@ -22,5 +25,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+private:
+	// Add an overlap volume
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USphereComponent> Sphere;
+	
+	// Add a mesh to make it the root component
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> Mesh;
 
 };
