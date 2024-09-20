@@ -56,8 +56,9 @@ public:
 	* But, instead of writing all macros we need, we'll copy the definition from AttributeSet.h and paste it here right after the includes.
 	* That's yet another boilerplate code we'll add to this class.
 	* Therefore, if we need to say initialize an attribute, we can use the Init function defined by those macros in AttributeSet.h. We'd do
-	*  that in the constructor like: 
+	*  that in the constructor (use the setter is too early, so we use initter) like: 
 	*  InitHealth(100.f);
+	* To verify the values have been set, we can open the editor, click on the viewport, ~, and write showdebug abilitysystem.
 	*/
 
 	/** Attributes */
@@ -68,12 +69,16 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
 	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
 
 	// MANA
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
 	FGameplayAttributeData Mana;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
 	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
 
 	/** OnRep functions */
 	UFUNCTION()
