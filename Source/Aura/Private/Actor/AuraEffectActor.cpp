@@ -45,17 +45,19 @@ void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	* Now we have the other actor's AuraAttributeSet, if it has one.
 	* We know that in our game every actor that implements the AbilitySystemInterface, has an AuraAttributeSet, so we won't check that pointer either.
 	* With that AuraAttributeSet pointer we'll have access to the attributes thanks to the boilerplate attribute accessors macro! However, we'll have
-	*	to cast the AuraAttributeSet pointer to remove the 'consteness' in order to change the attribute (which is something we shouldn't be doing,
-	*  (GetAttributeSet returns a const pointer for that reason!) and that's why we gotta 'break' the rule by removing the const).
+	*	to cast away the constness of AuraAttributeSet pointer ie remove the 'constness' in order to change the attribute (which is something we 
+	*  shouldn't be doing, for it breaks encapsulation. Also, GetAttributeSet returns a const pointer for a reason! And that's why we gotta 'break'
+	*  the rule by removing the const).
 	*/
 
-	// TODO: Change this to apply a Gameply Effect. For now, using const_cast as a hack!
+	// TODO: Change this to apply a Gameplay Effect. For now, using const_cast as a hack!
 	if (IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor))
 	{
 		const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
 
 		UAuraAttributeSet* MutableAuraAttributeSet = const_cast<UAuraAttributeSet*>(AuraAttributeSet);
 		MutableAuraAttributeSet->SetHealth(AuraAttributeSet->GetHealth() + 25.f);
+		Destroy();
 	}
 
 }
