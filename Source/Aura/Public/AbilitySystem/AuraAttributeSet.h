@@ -42,6 +42,13 @@ public:
 	* 
 	* There's another step that must be done in order to register a variable for replication: override a function where we register variables for
 	*  replication!
+	* 
+	* Attributes consist of two values:
+	*  - Base value: this is the permanent value of an attribute.
+	*  - Current value: the base value plus any temporary modification caused by Gameplay Effects (buffs and/or debuffs)
+	*  IMPORTANT: the Base value IS-NOT the max value. Max value for an attribute is set separately from the attribute itself. In fact the max value
+	*   should be its own a separate attribute since it can/might change. By separating it, we can have Gameplay Effects affecting the attribute itself
+	*   or the Max value separately. And the fraction of a health bar, for example, could be calculated as Health attribute set/MaxHealth attribute set.
 	*/
 	
 	// Register variables for replication
