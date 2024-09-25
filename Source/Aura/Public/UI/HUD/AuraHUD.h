@@ -10,9 +10,16 @@
 class UAuraUserWidget;
 class UOverlayWidgetController;
 struct FWidgetControllerParams;
+class UAbilitySystemComponent;
+class UAttributeSet;
 
 /**
+ * A HUD class is a great place to do HUD related things such as drawing widgets to the screen.
+ * Here we'll add the necessary code to add the overlay widget to the screen.
  * 
+ * InitOverlay() neeeds the 4 key variables a widget controller has. To call it we must know where those variables are initialized already,
+ *  and a good place to do it is in AuraCharacter InitAbilityActorInfo() function, which is called in both PossessedBy() for taking care of
+ *  the server, and called in OnRep_PlayerState() which takes care of the client.
  */
 UCLASS()
 class AURA_API AAuraHUD : public AHUD
