@@ -54,8 +54,13 @@ class AURA_API UAuraWidgetController : public UObject
 	* 
 	* As this widget controller has these 4 key variables, we need to set them when creating a widget controller. An easier way to do it is
 	*  to create a struct with these 4 variables in it, making initialization of a widget controller easier.
-	* 
+	* After creating the struct, we'll have a function that initializes the member variables with values from that struct when a widget controller
+	*  is created.
 	*/
+public:
+	// Initializes struct values
+	UFUNCTION(BlueprintCallable)
+	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
