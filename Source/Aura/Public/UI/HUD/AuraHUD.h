@@ -28,8 +28,11 @@ public:
 	*/
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
 
+	// Construct the widget, the widget controller, set the widget's widget controller and add it to the viewport
+	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
+
 protected:
-	virtual void BeginPlay() override;
+
 
 private:
 	// As we need to know which class we need to create the widget, we gotta store it in a UClass kind of pointer variable. Set it in BP.
