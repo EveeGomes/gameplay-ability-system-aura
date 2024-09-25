@@ -8,6 +8,8 @@
 
 /** Forward Declaration */
 class UAuraUserWidget;
+class UOverlayWidgetController;
+struct FWidgetControllerParams;
 
 /**
  * 
@@ -19,7 +21,13 @@ class AURA_API AAuraHUD : public AHUD
 public:
 	UPROPERTY()
 	TObjectPtr<UAuraUserWidget> OverlayWidget;
-	
+	/**
+	* Create a widget controller if it hasn't been created yet, or return if there is already one. i.e. we only ever have
+	*  one overlay widget controller (similar to a singleton, we'll only be able to get it from a getter which also creates one if it still doesn't
+	*  exist).
+	*/
+	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -27,4 +35,12 @@ private:
 	// As we need to know which class we need to create the widget, we gotta store it in a UClass kind of pointer variable. Set it in BP.
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAuraUserWidget> OverlayWidgetClass;
+
+	// Store the overlay widget controller
+	UPROPERTY()
+	TObjectPtr<UOverlayWidgetController> OverlayWidgetController;
+
+	// To create the overlay widget controller, we need a UClass of type UOverlayWidgetController
+	UPROPERTY(EditAnywhere) // since we need to set it from BP
+	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
 };

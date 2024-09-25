@@ -16,7 +16,7 @@ struct FWidgetControllerParams
 	GENERATED_BODY()
 
 	// Default constructor
-	FWidgetControllerParams() {}
+	FWidgetControllerParams() {} // use = default; instead of empty body {}?
 	// Define the constructor using an initializer list
 	FWidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS) 
 		: fPlayerController(PC), fPlayerState(PS), fAbilitySystemComponent(ASC), fAttributeSet(AS) {}
@@ -56,6 +56,9 @@ class AURA_API UAuraWidgetController : public UObject
 	*  to create a struct with these 4 variables in it, making initialization of a widget controller easier.
 	* After creating the struct, we'll have a function that initializes the member variables with values from that struct when a widget controller
 	*  is created.
+	* 
+	* This class will work as a Base class of "widget controllers". This way we can have derived widget controllers that would work with each
+	*  specific widget, for example our Overlay widget would have its own widget controller.
 	*/
 public:
 	// Initializes struct values
