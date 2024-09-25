@@ -9,6 +9,32 @@
 class UAttributeSet;
 class UAbilitySystemComponent;
 
+/** Struct with 4 key variables */
+USTRUCT(BlueprintType)
+struct FWidgetControllerParams
+{
+	GENERATED_BODY()
+
+	// Default constructor
+	FWidgetControllerParams() {}
+	// Define the constructor using an initializer list
+	FWidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS) 
+		: fPlayerController(PC), fPlayerState(PS), fAbilitySystemComponent(ASC), fAttributeSet(AS) {}
+
+	// When creating structs we should initialize all member variables otherwise we tend to get compiler warnings.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<APlayerController> fPlayerController = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<APlayerState> fPlayerState = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAbilitySystemComponent> fAbilitySystemComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAttributeSet> fAttributeSet = nullptr;
+};
+
 /**
  * This is our class responsible for getting data from the system, from the MODEL in our architecture, and then broadcast to our user widgets.
  */
@@ -19,12 +45,16 @@ class AURA_API UAuraWidgetController : public UObject
 	
 	/** 
 	* Here we'll have a set of variables from which it's going to get any data.
-	* As for this game project, we're interested in 4 classes to retrieve data, so we'll have to have access to them:
+	* As for this game project, we're interested in 4 classes to retrieve data from, so we'll have to have access to them:
 	*  - the ASC;
 	*  - the attribute set;
 	*  - the player state;
 	*  - the player controller
 	* We'll make these as protected variables, so children can have access to it.
+	* 
+	* As this widget controller has these 4 key variables, we need to set them when creating a widget controller. An easier way to do it is
+	*  to create a struct with these 4 variables in it, making initialization of a widget controller easier.
+	* 
 	*/
 
 protected:
