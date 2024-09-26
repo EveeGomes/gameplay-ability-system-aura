@@ -54,12 +54,18 @@ void AAuraPlayerController::BeginPlay()
    *  using if and an assertion is that we'll get a crash if Subsystem is null.
    * https://dev.epicgames.com/documentation/en-us/unreal-engine/asserts-in-unreal-engine?application_version=5.3
    * 
+   * As for class 33, we'll change from using an assert to using if statement. That is because for multiplayer games, the subsystem might be null
+   *  and we don't want the game to crash but to continue. And only when isn't null is that we can add the mapping context. Also check comment on
+   *  AuraCharacter -> InitAbilityActorInfo().
+   * 
    * Then, we proceed to add the IMC. Since we only have one, we'll have priority as 0.
    */
 
    UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-   check(Subsystem);
-   Subsystem->AddMappingContext(AuraContext, 0);
+   if (Subsystem)
+   {
+      Subsystem->AddMappingContext(AuraContext, 0);
+   }
 
    /** 
    * There are some settings that player controller has control over, that we can set here in BeginPlay(). Some examples are: showing the
