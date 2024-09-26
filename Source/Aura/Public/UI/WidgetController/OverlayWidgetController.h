@@ -22,9 +22,11 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, Ne
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
 
 /**
- * 
+ * We'll make this a BluprintType and Blueprintable.
+ * BlueprintType means we can use it as a type in Event Graph (for example if we need to cast to it).
+ * Blueprintable means we can make a blueprint based on this class.
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class AURA_API UOverlayWidgetController : public UAuraWidgetController
 {
 	GENERATED_BODY()
