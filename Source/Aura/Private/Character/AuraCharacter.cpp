@@ -12,6 +12,7 @@
 
 /**  */
 #include "Player/AuraPlayerController.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -72,9 +73,15 @@ void AAuraCharacter::InitAbilityActorInfo()
    * Another place which something similar happens, is in AuraPlayerController BeginPlay(). So for multiplayer games, unless we're in our locally
    *  controlled machine that has a valid local player, we should check the subsystem instead of using an assert and proceed with adding the mapping
    *  context.
+   * As we get the HUD (in this case our AuraHUD), we also need to check since it'll only be valid in the player's local machine.
    */
    if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
    {
-
+      // Get and check AuraHUD
+      if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+      {
+         // Call InitOverlay() and pass the args as we now have them all initialized!
+         AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+      }
    }
 }
