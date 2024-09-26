@@ -65,6 +65,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 
+	/** 
+	* The widget controller doesn't know anything about the widget. All it knows is that it has access to all 4 key variables, which is how it's
+	*  going to access data to broadcast them to the widget! By broadcasting, we're talking about Delegates for they're great ways to have one-way
+	*  dependencies (widget controller doesn't know about the widget, but the widget knows about the widget controller).
+	* So, the widget controller should have a way of broadcasting initial values, like initial health and mana values.
+	* We'll have a virtual function for broadcasting initial values so that any widget controller child of this class that inherits this function 
+	*  can broadcast its own unique initial values.
+	*/
+	virtual void BroadcastInitialValues();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
