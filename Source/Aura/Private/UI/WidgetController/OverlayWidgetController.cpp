@@ -51,7 +51,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 {
    // No need to call Super (it's empty)
    
-   // Bind callback function to be called whenever the attribute, related to it, changes.
+   /** Bind callback function to be called whenever the attribute, related to it, changes. */
    const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(AttributeSet);
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
@@ -61,12 +61,16 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
       AuraAttributeSet->GetMaxHealthAttribute()).AddUObject(this, UOverlayWidgetController::MaxHealthChanged);
 }
 
-void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data)
+void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
 {
-
+   /** 
+   * All we want to do when the health changes is to broadcast our OnHealthChanged delegate so the widgets can respond to it.
+   * We use Data.NewValue to get the value that has just changed (instead of using AuraAttributeSet->GetHealth()).
+   */
+   OnHealthChanged.Broadcast(Data.NewValue);
 }
 
-void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data)
+void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
 {
-
+   OnMaxHealthChanged.Broadcast(Data.NewValue);
 }
