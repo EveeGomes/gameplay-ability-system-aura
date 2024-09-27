@@ -58,7 +58,10 @@ public:
 
 protected:
 	/** Callbacks to bind to delegates that broadcast changes to attributes */
+	// Health
 	void HealthChanged(const FOnAttributeChangeData& Data) const;
 	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
-
+	// Mana
+	void ManaChanged(const FOnAttributeChangeData& Data) const;
+	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
 };

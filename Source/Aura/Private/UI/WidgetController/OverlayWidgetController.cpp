@@ -28,9 +28,13 @@ void UOverlayWidgetController::BroadcastInitialValues()
    */
    
    const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
-   // Broadcast initial values
+   /** Broadcast initial values */
+   // Health
    OnHealthChanged.Broadcast(AuraAttributeSet->GetHealth());
    OnMaxHealthChanged.Broadcast(AuraAttributeSet->GetMaxHealth());
+   // Mana
+   OnManaChanged.Broadcast(AuraAttributeSet->GetMana());
+   OnMaxManaChanged.Broadcast(AuraAttributeSet->GetMaxMana());
 
    /** 
    * For us to be able to respond to when those attributes change, we'll use a function from the Ability System Component that requires the
@@ -72,4 +76,14 @@ void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data)
 void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
 {
    OnMaxHealthChanged.Broadcast(Data.NewValue);
+}
+
+void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data) const
+{
+   OnManaChanged.Broadcast(Data.NewValue);
+}
+
+void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
+{
+   OnMaxManaChanged.Broadcast(Data.NewValue);
 }
