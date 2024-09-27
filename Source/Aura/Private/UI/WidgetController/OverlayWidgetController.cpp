@@ -31,4 +31,42 @@ void UOverlayWidgetController::BroadcastInitialValues()
    // Broadcast initial values
    OnHealthChanged.Broadcast(AuraAttributeSet->GetHealth());
    OnMaxHealthChanged.Broadcast(AuraAttributeSet->GetMaxHealth());
+
+   /** 
+   * For us to be able to respond to when those attributes change, we'll use a function from the Ability System Component that requires the
+   *  attribute we're talking about and then returns a delegate we can bind to. We bind to it using .AddUObject() (if it was a dynamic multicast
+   *  delegate we'd use AddDynamic()). When calling AddUObject we need to also pass a callback function that must have a specific signature so it 
+   *  can be bound. But instead of doing this directly in this function, we'll create one in the parent class that will take care of the bindings.
+   * 
+   * Binding callbacks to the dependencies of this widget controller is something all widget controllers need to do. Therefore we'll make a function
+   *  we can use to bind our callbacks to all those dependencies. That will be done in the parent class, AuraWidgetController so all widget controllers
+   *  can implement that function!
+   * Then, we create (in this class/child class!) the bind functions using the specific signature needed.
+   */
+
+   //AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddUObject(this, &callback fully qualified);
+}
+
+void UOverlayWidgetController::BindCallbacksToDependencies()
+{
+   // No need to call Super (it's empty)
+   
+   // Bind callback function to be called whenever the attribute, related to it, changes.
+   const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(AttributeSet);
+
+   AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+      AuraAttributeSet->GetHealthAttribute()).AddUObject(this, UOverlayWidgetController::HealthChanged);
+
+   AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+      AuraAttributeSet->GetMaxHealthAttribute()).AddUObject(this, UOverlayWidgetController::MaxHealthChanged);
+}
+
+void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data)
+{
+
+}
+
+void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data)
+{
+
 }
