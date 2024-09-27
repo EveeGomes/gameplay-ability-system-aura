@@ -6,6 +6,9 @@
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
+/** Forward Declaration */
+struct FOnAttributeChangeData;
+
 /** 
 * Add/Make dynamic multicast delegates to broadcast any change in attributes. Events will be bound to these delegates to let us perform other
 *  updates as needed.
