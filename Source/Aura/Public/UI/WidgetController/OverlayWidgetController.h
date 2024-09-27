@@ -7,8 +7,9 @@
 #include "OverlayWidgetController.generated.h"
 
 /** 
-* Add/Make dynamic multicast delegates to
-* Dynamic so that we can assign events in in BP (in our widget BP specifically);
+* Add/Make dynamic multicast delegates to broadcast any change in attributes. Events will be bound to these delegates to let us perform other
+*  updates as needed.
+* Dynamic so that we can assign events in BP (in our widget BP specifically);
 * Multicast because multiple BPs, widget BPs, may want to bind to these delegates so that they can update.
 * 
 * Once the types are created and the variables, they can be used in BP. If a WBP has access to the widget controller, they an assign an event
