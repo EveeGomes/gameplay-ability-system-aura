@@ -43,7 +43,6 @@ void UOverlayWidgetController::BroadcastInitialValues()
    *  can implement that function!
    * Then, we create (in this class/child class!) the bind functions using the specific signature needed.
    */
-
    //AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddUObject(this, &callback fully qualified);
 }
 
