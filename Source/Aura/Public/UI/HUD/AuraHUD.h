@@ -14,6 +14,10 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 
 /**
+ * A HUD is a way of projecting information in form of text, images, animations etc, to inform the player what's happening to its character, or
+ *  to the environment. It can aso represent menu screens, credits, etc.
+ *  (https://jollymonsterstudio.com/2019/03/12/unreal-engine-c-fundamentals-ahud-uuserwidget-and-uwidgetanimation/)
+ * 
  * A HUD class is a great place to do HUD related things such as drawing widgets to the screen.
  * Here we'll add the necessary code to add the overlay widget to the screen.
  * 
