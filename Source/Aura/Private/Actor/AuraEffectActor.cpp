@@ -35,3 +35,8 @@ void AAuraEffectActor::BeginPlay()
 	Super::BeginPlay();
 	
 }
+
+void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+{
+	// Check if the other actor (Target in this case) implements the ability system interface so we can get its ability system.
+}

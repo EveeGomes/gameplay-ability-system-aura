@@ -12,7 +12,7 @@
 */
 
 /** Forward Declarations */
-class USphereComponent;
+class UGameplayEffect;
 
 UCLASS()
 class AURA_API AAuraEffectActor : public AActor
@@ -25,6 +25,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
 
+	UFUNCTION(BlueprintCallable)
+	void ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass);
+
+	/** 
+	* We'll create a function to apply an effect to the other actor that overlaps with this actor. For that we'll create a GameplayEffect variable
+	*  that can be accessed from BP, and is TSubclassOf. That will represent the class of the instant gameplay effect we want to apply.
+	*/
+	UPROPERTY(EditAnywhere, Category = "Applied Effects")
+	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
 };
