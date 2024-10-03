@@ -22,37 +22,9 @@ class AURA_API AAuraEffectActor : public AActor
 public:	
 	AAuraEffectActor();
 
-	/** 
-	* Overlap callback functions. They must be UFUNCTION() and are bound to their delegate in BeginPlay().
-	*/
-	UFUNCTION()
-	virtual void OnOverlap(
-		UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult
-	);
-
-	UFUNCTION()
-	virtual void EndOverlap(
-		UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex
-	);
-
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	// Add an overlap volume
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
-	
-	// Add a mesh to make it the root component
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UStaticMeshComponent> Mesh;
 
 };
