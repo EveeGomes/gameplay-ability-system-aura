@@ -15,7 +15,7 @@ struct FOnAttributeChangeData;
 * Dynamic so that we can assign events in BP (in our widget BP specifically);
 * Multicast because multiple BPs, widget BPs, may want to bind to these delegates so that they can update.
 * 
-* Once the types are created and the variables, they can be used in BP. If a WBP has access to the widget controller, they an assign an event
+* Once the types are created and the variables, they can be used in BP. If a WBP has access to the widget controller, they can assign an event
 *  to receive that health if we broadcasted it.
 * So, to broadcast values, we take the delegate and call .Broadcast()
 */

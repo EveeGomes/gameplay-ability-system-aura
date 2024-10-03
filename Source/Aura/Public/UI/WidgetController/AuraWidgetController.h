@@ -37,6 +37,8 @@ struct FWidgetControllerParams
 
 /**
  * This is our class responsible for getting data from the system, from the MODEL in our architecture, and then broadcast to our user widgets.
+ * It has some virtual functions that children classes will implement. These children classes will have their delegates in order to broadcast
+ *  information to the widgets!
  */
 UCLASS()
 class AURA_API UAuraWidgetController : public UObject
