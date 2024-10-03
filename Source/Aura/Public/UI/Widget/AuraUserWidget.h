@@ -7,6 +7,9 @@
 #include "AuraUserWidget.generated.h"
 
 /**
+ * A single purpose component that can be attached to locations on the hud and the viewport. It's normally a single "UI thing" or a logical grouping
+ *  of "UI things".
+ *  (https://jollymonsterstudio.com/2019/03/12/unreal-engine-c-fundamentals-ahud-uuserwidget-and-uwidgetanimation/)
  * This is our Base class for widgets.
  */
 UCLASS()
