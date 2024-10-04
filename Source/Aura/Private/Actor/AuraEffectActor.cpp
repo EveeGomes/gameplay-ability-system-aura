@@ -10,6 +10,9 @@
 #include "AbilitySystemInterface.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 
+/** GAS Library */
+#include "AbilitySystemBlueprintLibrary.h"
+
 AAuraEffectActor::AAuraEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -44,4 +47,9 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplay
 	{
 		ASCInterface->GetAbilitySystemComponent();
 	}
+	/** 
+	* Another option for getting the ASC of other actor is using static functions from static classes. GAS has their own library we could use
+	*  and it has a function that would cast an actor to the ASC interface or it would search for a component in the actor with ASC interface.
+	*/
+	UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
 }
