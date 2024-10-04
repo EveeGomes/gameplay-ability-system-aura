@@ -33,7 +33,7 @@ void AAuraEffectActor::BeginPlay()
 	
 }
 
-void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
 	/** 
 	* Another option for getting the ASC of other actor is using static functions from static classes. GAS has their own library we could use
@@ -43,7 +43,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplay
 	*  overlaps with the volume. And since we don't want to crash our program, we'll use an if() check.
 	* Now, the GameplayEffectClass in other words needs to be set! So in that case we'll use check() and if it's null we'll get a crash intentionally.
 	*/
-	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetASC == nullptr) return;
 
 	/** 
