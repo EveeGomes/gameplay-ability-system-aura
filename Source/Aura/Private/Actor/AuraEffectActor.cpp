@@ -3,15 +3,9 @@
 
 #include "Actor/AuraEffectActor.h"
 
-/** Components */
-#include "Components/SphereComponent.h"
-
-/** To cast and check in overlap callbacks */
-#include "AbilitySystemInterface.h"
-#include "AbilitySystem/AuraAttributeSet.h"
-
 /** GAS Library */
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 AAuraEffectActor::AAuraEffectActor()
 {
@@ -78,15 +72,12 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplay
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	// Store what object cause this effect
 	EffectContextHandle.AddSourceObject(this);
-	// Create a FGameEffectSpecHandle so it can be passed in ApplyGameplayEffectSpecToSelf(). ps: some people won't make variable names as decriptive
-	//  by not adding Handle to the variable name, so be aware of it and always check its type!
-	FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.f, EffectContextHandle);
+	// Create a FGameEffectSpecHandle so it can be passed in ApplyGameplayEffectSpecToSelf().
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.f, EffectContextHandle);
 	/** 
 	* EffectSpecHandle wrappes the Data (like other handles!), the real FGameplayEffectSpec. That Data is yet another wrapper, a TSharedPtr of type
 	*  FGameplayEffectSpec. So in ApplyGameplayEffectSpecToSelf, we need to pass a const reference of a FGameplayEffectSpec, and to get it we'll use
 	*  the handle, access the Data, call its Get() function which will give us the raw FGameplayEffectSpec pointer and use * to finally dereference it!
 	*/
 	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
-
-
 }
