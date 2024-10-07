@@ -41,7 +41,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	* Then, once we have the target ASC, we can apply the gameplay effect!
 	* To safeguard our code, we'll check the Actor pointer so this function won't do anything in case something that doesn't have an ASC  
 	*  overlaps with the volume. And since we don't want to crash our program, we'll use an if() check.
-	* Now, the GameplayEffectClass in other words needs to be set! So in that case we'll use check() and if it's null we'll get a crash intentionally.
+	* On the other hand, the GameplayEffectClass needs to be set! So in that case we'll use check() and if it's null we'll get a crash intentionally.
 	*/
 	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetASC == nullptr) return;
@@ -64,8 +64,8 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	*  wrapper!). So, to create that we'll use the ASC as it has a function for everything lol, called MakeEffectContext(). Once we have the handle,
 	*  we can use its methods/functionalities/utility functions to do anything we want. (Check definition of FGameplayEffectContextHandle).
 	* 
-	* So, as soon as the TSubclassOf<UGameplayEffect> is set to some GameplayEffect, this function ApplyEffectToTarget() should work.
-	* We can call this function from BP as we have our Sphere setup there. And we'll call it when overlapping.
+	* So, as soon as the TSubclassOf<UGameplayEffect> is set to some GameplayEffect (done in BP), this function ApplyEffectToTarget() should work.
+	* We can call this function from BP as we have our Sphere (or any other collision component) setup there. And we'll call it when overlapping.
 	*/
 
 	check(GameplayEffectClass);
