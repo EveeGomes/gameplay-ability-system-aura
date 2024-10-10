@@ -20,6 +20,9 @@ class UGameplayEffect;
 *  the effect removal. In this policy we'll determine if the effects will be applied on overlap, or end overlap and so on.
 * Create a scoped enum: EEffectApplicationPolicy (i.e. how we're going to apply the effect)
 * Then, we can create a variable of this enum type for each of the GE (variable).
+* 
+* Create another scoped enum: EEffectRemovalPolicy that will be used to deal with how these effects will be removed. So in this case this enum only applies to an infinite
+*  GE since a duration based GE is able to remove itself.
 */
 UENUM(BlueprintType)
 enum class EEffectApplicationPolicy
@@ -27,6 +30,13 @@ enum class EEffectApplicationPolicy
 	ApplyOnOverlap,
 	ApplyOnEndOverlap,
 	DoNotApply
+};
+
+UENUM(BlueprintType)
+enum class EEffectRemovalPolicy
+{
+	RemoveOnEndOverlap,
+	DoNotRemove
 };
 
 
@@ -68,4 +78,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEffectApplicationPolicy InfiniteEffectApplicationPolicy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
+	EEffectRemovalPolicy InfiniteEffectRemovalPolicy;
 };
