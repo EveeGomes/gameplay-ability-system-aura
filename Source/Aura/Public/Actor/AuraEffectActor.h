@@ -51,6 +51,23 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	/** 
+	* Now, we'll have a pair of functions for when we begin and end overlap, that we can call from BP that can just handle the enums and GEs.
+	* These functions will only receive the TargetActor as we don't really need the GEs, we just need them set (and this actor can have their own effects set).
+	* The overlap functions will work to whatever volume we add in BP. In those functions we'll decide which effects to apply and when based on their policies!
+	*/
+	UFUNCTION(BlueprintCallable)
+	void OnOverlap(AActor* TargetActor);
+
+	UFUNCTION(BlueprintCallable)
+	void OnEndOverlap(AActor* TargetActor);
+
+	/** 
+	* Have a boolean to destroy our actor after the effect has been removed, if we want to.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
+	bool bDestroyOnEffectRemoval = false;
+
 	// Create a GameplayEffect in BP, use the Sphere created there and use this function
 	UFUNCTION(BlueprintCallable)
 	void ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass);
