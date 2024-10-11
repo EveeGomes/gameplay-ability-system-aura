@@ -66,7 +66,32 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 	}
 	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{
+		/** 
+		* We'll loop through our map to check if there's an ASC linking an active effect to the ASC that we're dealing with in this function!
+		* For that we'll create a local TargetASC pointer from the TargetActor passed to this function. Then we'll use it to search through
+		*  the map.
+		* Once we find, we should use the ASC to remove the GE. And by doing that we should also remove that pair from the map! However, we can't 
+		*  remove an element from the container we're currently looping through... that would cause a crash! So, we could have some sort of container
+		*  of key-value pairs that we'd like to remove after we're done with the for loop. And while we find the and remove the active GE, we'd add it
+		*  to this container. We'll use a TArray of the type we'd like to remove.
+		*/
+		UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+		if (!IsValid(TargetASC)) return; // only proceed if it's valid, otherwise return
 
+		TArray<FActiveGameplayEffectHandle> HandlesToRemove;
+		for (TPair<FActiveGameplayEffectHandle, UAbilitySystemComponent*> HandlePair : ActiveEffectHandles)
+		{
+			if (TargetASC == HandlePair.Value)
+			{
+				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key);
+				HandlesToRemove.Add(HandlePair.Key);
+			}
+		}
+		// Now remove the element from our map by key (because the key is the ActiveGameplayEffectHandle!)
+		for (FActiveGameplayEffectHandle& Handle : HandlesToRemove)
+		{
+			ActiveEffectHandles.FindAndRemoveChecked(Handle);
+		}
 	}
 }
 
