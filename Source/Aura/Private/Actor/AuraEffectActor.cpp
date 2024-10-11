@@ -43,6 +43,10 @@ void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 	{
 		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
 	}
+	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+	{
+		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+	}
 }
 
 void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
@@ -54,6 +58,15 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+	}
+	// For Infinite Effect, we should check both Application and Removal policies!
+	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+	{
+		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+	}
+	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
+	{
+
 	}
 }
 
@@ -102,6 +115,28 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	* EffectSpecHandle wrappes the Data (like other handles!), the real FGameplayEffectSpec. That Data is yet another wrapper, a TSharedPtr of type
 	*  FGameplayEffectSpec. So in ApplyGameplayEffectSpecToSelf, we need to pass a const reference of a FGameplayEffectSpec, and to get it we'll use
 	*  the handle, access the Data, call its Get() function which will give us the raw FGameplayEffectSpec pointer and use * to finally dereference it!
+	* Now, we'll also store the returned FActiveGameplayEffectHandle in a local variable that will be linked in a map we'll create, to the ASC 
+	*  of the target actor (instead of the target actor to then get the ASC... we have the ASC already). That link will be made only if the duration 
+	*  policy is infinite.
+	* The map will map ActiveGameplayEffectHandles to ASC pointers (key, value)!
 	*/
-	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	const FActiveGameplayEffectHandle ActiveEffectHandle = TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+
+	/** 
+	* In order to check the GE duration policy, we can use the EffectSpecHandle since it wrappes the GE.
+	* Once we find the Duration policy to be infinite, we need to store this infinite effect somehow. So, to store it, we can use the return value from 
+	*  ApplyGameplayEffectSpecToSelf, which is an FActiveGameplayEffectHandle that has the GE! And besides storing it we should also link it up with 
+	*  the target actor!
+	* To have two values related to each other, we can use a map! :)
+	* 
+	* Now, we should only add the ActiveEffectHandle and the ASC pointer of the target actor, if we plan to remove the effect, if not we shouldn't even
+	*  store it. i.e. we should check the state of EEffectRemovalPolicy type variable! So, in addition to checking bIsInfinite, we should also check
+	*  this state.
+	* Then, in the function OnEndOverlap() we'll remove the GE! While in OnOverlap we apply the effect.
+	*/
+	const bool bIsInfinite = EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
+	if (bIsInfinite && InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
+	{
+		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
+	}
 }

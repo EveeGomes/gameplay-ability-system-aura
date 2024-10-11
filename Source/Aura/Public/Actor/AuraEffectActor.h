@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+/** For the FActiveGameplayEffectHandle */
+#include "GameplayEffectTypes.h"
+
 #include "AuraEffectActor.generated.h"
 
 /** 
@@ -13,6 +17,7 @@
 
 /** Forward Declarations */
 class UGameplayEffect;
+class UAbilitySystemComponent;
 
 /** 
 * Effect application Enum: used to handle the GEs in this EffectActor class, depending on which ones are set. We'll need to decide how this class will apply and remove
@@ -55,6 +60,8 @@ protected:
 	* Now, we'll have a pair of functions for when we begin and end overlap, that we can call from BP that can just handle the enums and GEs.
 	* These functions will only receive the TargetActor as we don't really need the GEs, we just need them set (and this actor can have their own effects set).
 	* The overlap functions will work to whatever volume we add in BP. In those functions we'll decide which effects to apply and when based on their policies!
+	* 
+	* The most complicated case in the Infinite GE, because we need to know whether the actor has the infinite effect on end overlap to remove it.
 	*/
 	UFUNCTION(BlueprintCallable)
 	void OnOverlap(AActor* TargetActor);
@@ -98,4 +105,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
+
+	/** Map ActiveGameplayEffectHandles to ASC pointers (key, value) */
+	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 };
