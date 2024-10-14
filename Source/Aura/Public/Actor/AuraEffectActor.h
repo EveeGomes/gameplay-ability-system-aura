@@ -75,30 +75,63 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	bool bDestroyOnEffectRemoval = false;
 
-	// Create a GameplayEffect in BP, use the Sphere created there and use this function
+	/** 
+	* Apply a GE to the specified target actor (the actor that overlaps with this actor).
+	* 
+	* @param TargetActor The actor to apply the effect to.
+	* @param GameplayEffectClass The class of the GE to apply
+	* 
+	* Create a GameplayEffect in BP. Associate them, in BP, with this EffectActor through the Duration Types variables!
+	*/
 	UFUNCTION(BlueprintCallable)
 	void ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass);
 
+	/**
+	* Loop through all GEs in the array of GEs and call ApplyEffectToTarget for each element.
+	* Used in the overlap pair functions.
+	*
+	* @param TargetActor The actor to apply the effect to.
+	* @param GameplayEffectClass The class of the GE to apply.
+	*/
+	UFUNCTION(BlueprintCallable)
+	void ApplyEffectsToTarget(AActor* TargetActor, TArray<TSubclassOf<UGameplayEffect>> GameplayEffectClasses);
 	/** 
-	* We'll create a function to apply an effect to the other actor that overlaps with this actor. For that we'll create a GameplayEffect variable
-	*  that can be accessed from BP, and is TSubclassOf. That will represent the class of the instant gameplay effect we want to apply.
+	* Side quest from Lesson 45 - Multiple Effect (Arrays of each Duration Type)
+	* 1. Create an array of each duration type
+	* [x] instant
+	* [x] duration
+	* [x] infinite
+	* 
+	* 2. Each GE is called in both OnOverlap and OnEndOverlap as a param of ApplyEffectToTarget().
+	* So, instead of adding a for-each loop in each if statement of these functions, create a function that loops through the array of duration types
+	*  and for each element, call ApplyEffectToTarget(). Then, in the overlap pair functions, call this newly created function that will take care of
+	*  calling all the GE in the array.
+	* [x] create function ApplyEffectsToTarget()
+	* 
+	* 3. Should each Duration type actually be a struct with their TSubclassOf, ApplicationPolicy and RemovalPolicy (for infinite)?
+	* This way each GE applied to this actor would have their own policy instead of all GEs of same type sharing the same policy?
+	*/
+
+	/** 
+	* Arrays of GameplayEffect variables accessed and set from BP, representing the class of a gameplay effect we want to apply.
+	* Below of each array: their application policy and removal policy (infinite GE)
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InstantGameplayEffectClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEffectApplicationPolicy InstantEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 
 	// Used by GE that has duration policy as Has Duration
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> DurationGameplayEffectClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEffectApplicationPolicy DurationEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 
 	// To make an Infinite GE, this class should have an infinite GE TSubclassOf variable
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InfiniteGameplayEffectClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEffectApplicationPolicy InfiniteEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;

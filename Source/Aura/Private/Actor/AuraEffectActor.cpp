@@ -26,7 +26,6 @@ AAuraEffectActor::AAuraEffectActor()
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 }
 
-
 void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -37,15 +36,15 @@ void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		ApplyEffectsToTarget(TargetActor, InstantGameplayEffectClasses);
 	}
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		ApplyEffectsToTarget(TargetActor, DurationGameplayEffectClasses);
 	}
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		ApplyEffectsToTarget(TargetActor, InfiniteGameplayEffectClasses);
 	}
 }
 
@@ -53,16 +52,16 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		ApplyEffectsToTarget(TargetActor, InstantGameplayEffectClasses);
 	}
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		ApplyEffectsToTarget(TargetActor, DurationGameplayEffectClasses);
 	}
 	// For Infinite Effect, we should check both Application and Removal policies!
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		ApplyEffectsToTarget(TargetActor, InfiniteGameplayEffectClasses);
 	}
 	// Remove the GE from the ASC that we linked up with (when we added the key-value pair of effect handles to ASCs - when we apply the 
 	//  effect in ApplyEffectToTarget)
@@ -167,5 +166,13 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	if (bIsInfinite && InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{
 		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
+	}
+}
+
+void AAuraEffectActor::ApplyEffectsToTarget(AActor* TargetActor, TArray<TSubclassOf<UGameplayEffect>> GameplayEffectClasses)
+{
+	for (TSubclassOf<UGameplayEffect>& GameplayEffectClass : GameplayEffectClasses)
+	{
+		ApplyEffectToTarget(TargetActor, GameplayEffectClass);
 	}
 }
