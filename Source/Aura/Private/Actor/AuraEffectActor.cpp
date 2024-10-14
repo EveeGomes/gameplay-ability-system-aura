@@ -64,6 +64,8 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 	{
 		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
 	}
+	// Remove the GE from the ASC that we linked up with (when we added the key-value pair of effect handles to ASCs - when we apply the 
+	//  effect in ApplyEffectToTarget)
 	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{
 		/** 
@@ -83,7 +85,7 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 		{
 			if (TargetASC == HandlePair.Value)
 			{
-				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key);
+				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key, 1);
 				HandlesToRemove.Add(HandlePair.Key);
 			}
 		}
