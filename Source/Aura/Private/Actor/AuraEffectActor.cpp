@@ -85,6 +85,8 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 		{
 			if (TargetASC == HandlePair.Value)
 			{
+				// pass the second param as 1 so it'll remove a single stack. We might have multiple effect actors and each of them have their own map. 
+				//  So each one should only remove a single stack
 				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key, 1);
 				HandlesToRemove.Add(HandlePair.Key);
 			}
