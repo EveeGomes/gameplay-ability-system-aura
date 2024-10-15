@@ -40,6 +40,8 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
    // Check if Attribute matches any of our attributes
    if (Attribute == GetHealthAttribute())
    {
+      // Avoid Health to ever go above MaxHealth value or below 0
+      NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
       UE_LOG(LogTemp, Warning, TEXT("Health: %f"), NewValue);
    }
    if (Attribute == GetMaxHealthAttribute())
@@ -48,6 +50,8 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
    }
    if (Attribute == GetManaAttribute())
    {
+      // Avoid Mana to ever go above MaxMana or below 0
+      NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
       UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), NewValue);
    }
    if (Attribute == GetMaxManaAttribute())
