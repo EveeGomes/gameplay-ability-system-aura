@@ -42,21 +42,11 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
    {
       // Avoid Health to ever go above MaxHealth value or below 0
       NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
-      UE_LOG(LogTemp, Warning, TEXT("Health: %f"), NewValue);
-   }
-   if (Attribute == GetMaxHealthAttribute())
-   {
-      UE_LOG(LogTemp, Warning, TEXT("Max Health: %f"), NewValue);
    }
    if (Attribute == GetManaAttribute())
    {
       // Avoid Mana to ever go above MaxMana or below 0
       NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
-      UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), NewValue);
-   }
-   if (Attribute == GetMaxManaAttribute())
-   {
-      UE_LOG(LogTemp, Warning, TEXT("Max Mana: %f"), NewValue);
    }
 }
 
