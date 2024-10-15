@@ -6,6 +6,9 @@
 /** Register variables for replication */
 #include "Net/UnrealNetwork.h"
 
+/** PostGameplayEffectExecute */
+#include "GameplayEffectExtension.h"
+
 UAuraAttributeSet::UAuraAttributeSet()
 {
    // Initialize Attributes
@@ -47,6 +50,20 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
    {
       // Avoid Mana to ever go above MaxMana or below 0
       NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
+   }
+}
+
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+   Super::PostGameplayEffectExecute(Data);
+
+   // Use Data and see what attribute has been changed
+   if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+   {
+      // print the attribute value
+      UE_LOG(LogTemp, Warning, TEXT("Health from GetHealth(): %f"), GetHealth());
+      // print how much we're changing the attribute (the health in this case)
+      UE_LOG(LogTemp, Warning, TEXT("Magnitude: %f"), Data.EvaluatedData.Magnitude);
    }
 }
 

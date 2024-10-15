@@ -62,6 +62,12 @@ public:
 	//  returned from querying the modifier. Later operations recalculate the current value from all modifiers, so we'll need to clam again.
 	// https://github.com/tranek/GASDocumentation/blob/master/README.md#445-preattributechange
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+
+	/** 
+	* Executed after a GE changes an attribute. We have access to a lot of information via the parameter Data, which will be based on the effect that's
+	*  just been applied. 
+	*/
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	/** End UAttributeSet */
 
 	/**
