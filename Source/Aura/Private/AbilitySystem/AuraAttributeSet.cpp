@@ -8,6 +8,7 @@
 
 /** PostGameplayEffectExecute */
 #include "GameplayEffectExtension.h"
+#include "GameFramework/Character.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -57,14 +58,47 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 {
    Super::PostGameplayEffectExecute(Data);
 
-   // Use Data and see what attribute has been changed
-   if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+   // Source = causer of the effect (source is something else that applied the effect to us)
+   // Target = target of the effect (owner of this AS - us, in this context)
+
+   // Get our effect context
+   const FGameplayEffectContextHandle EffectContextHandle = Data.EffectSpec.GetContext();
+   // Get the ASC from the source of this GE
+   const UAbilitySystemComponent* SourceASC = EffectContextHandle.GetInstigatorAbilitySystemComponent();
+   
+   // Since we're doing a lot of accessing pointers, we need to add some checks because not all sources might have ASC or AvatarActor.
+   // TSharedPtr is a struct that has its own utilities, so we can use . operator to call those utilities. Then, once checked if that
+   //  wrapper is valid, we can also use the -> operator to check if the poniter itself is valid.
+   if (IsValid(SourceASC) && SourceASC->AbilityActorInfo.IsValid() && SourceASC->AbilityActorInfo->AvatarActor.IsValid())
    {
-      // print the attribute value
-      UE_LOG(LogTemp, Warning, TEXT("Health from GetHealth(): %f"), GetHealth());
-      // print how much we're changing the attribute (the health in this case)
-      UE_LOG(LogTemp, Warning, TEXT("Magnitude: %f"), Data.EvaluatedData.Magnitude);
+      // With the SourceASC, we can get other things such as the source actor that owns the ASC
+      // AvatarActor is a pointer wrapper, so we have to call .Get() on that
+      AActor* SourceAvatarActor = SourceASC->AbilityActorInfo->AvatarActor.Get();
+
+      // Get (and store) the source's player controller (if the source has one) -> changed to AController (instead of APlayerController) because
+      //  Pawn->GetController() returns a AController and for now we don't need a PlayerController so we can avoid another cast. That could change
+      //  later if needed.
+      const AController* SourceController = SourceASC->AbilityActorInfo->PlayerController.Get();
+      // Now, in case the AbilityActorInfo has a nullptr for the PlayerController, we can fallback on getting the player controller from
+      //  the actor itself by casting it to a pawn. The source might not be a pawn, so we're only setting if we can.
+      if (SourceController == nullptr && SourceAvatarActor != nullptr)
+      {
+         // attempt to get the player controller from the pawn directly!
+         // Cast the avatar actor to a pawn and try to get the player controller from that pawn
+         if (const APawn* Pawn = Cast<APawn>(SourceAvatarActor))
+         {
+            SourceController = Pawn->GetController();
+         }
+      }
+      if (SourceController)
+      {
+         // Get the source character by casting the pawn possessed by the controller
+         ACharacter* SourceCharacter = Cast<ACharacter>(SourceController->GetPawn());
+      }
    }
+   
+
+   
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
