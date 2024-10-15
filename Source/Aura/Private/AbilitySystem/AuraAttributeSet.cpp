@@ -33,6 +33,29 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
    DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 }
 
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+   Super::PreAttributeChange(Attribute, NewValue);
+
+   // Check if Attribute matches any of our attributes
+   if (Attribute == GetHealthAttribute())
+   {
+      UE_LOG(LogTemp, Warning, TEXT("Health: %f"), NewValue);
+   }
+   if (Attribute == GetMaxHealthAttribute())
+   {
+      UE_LOG(LogTemp, Warning, TEXT("Max Health: %f"), NewValue);
+   }
+   if (Attribute == GetManaAttribute())
+   {
+      UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), NewValue);
+   }
+   if (Attribute == GetMaxManaAttribute())
+   {
+      UE_LOG(LogTemp, Warning, TEXT("Max Mana: %f"), NewValue);
+   }
+}
+
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
    // Inform the ability system that Health has just been replicated

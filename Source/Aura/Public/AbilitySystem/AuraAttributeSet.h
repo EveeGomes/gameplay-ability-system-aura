@@ -51,8 +51,15 @@ public:
 	*   or the Max value separately. And the fraction of a health bar, for example, could be calculated as Health attribute set/MaxHealth attribute set.
 	*/
 	
+	/** Begin UObject */
 	// Register variables for replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	/** End UObject */
+
+	/** Begin UAttributeSet */
+	// Called right before an attribute changes (either from a GE or changed directly). Used to do Campling.
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	/** End UAttributeSet */
 
 	/**
 	* Since we haven't learned about Gameplay Effects yet, we'll use some functions to access the attributes to retrieve and/or set them.
