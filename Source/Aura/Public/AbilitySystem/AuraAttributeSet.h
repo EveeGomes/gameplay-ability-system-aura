@@ -60,6 +60,7 @@ public:
 	// Called right before an attribute changes (changes to CurrentValue), either from a GE or changed directly through attribute accessors.
 	//  This function is used to do Campling, not to call other functionality. However, it doesn't permanently change the modifier, just the value
 	//  returned from querying the modifier. Later operations recalculate the current value from all modifiers, so we'll need to clam again.
+	// https://github.com/tranek/GASDocumentation/blob/master/README.md#445-preattributechange
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	/** End UAttributeSet */
 
