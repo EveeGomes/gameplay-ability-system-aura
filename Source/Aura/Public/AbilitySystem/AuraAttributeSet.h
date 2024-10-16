@@ -64,8 +64,10 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
 	/** 
-	* Executed after a GE changes an attribute. We have access to a lot of information via the parameter Data, which will be based on the effect that's
-	*  just been applied. 
+	* Executed after a GE changes an attribute, more precisely to the BaseValue of an attribute from an Instant GE.
+	* We have access to a lot of information via the parameter Data, which will be based on the effect that's just been applied. Therefore, this is
+	*  a great place to do more attribute manipulation when they change from a GE. 
+	*  https://github.com/tranek/GASDocumentation/blob/master/README.md#446-postgameplayeffectexecute
 	*/
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	/** End UAttributeSet */

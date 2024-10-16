@@ -61,6 +61,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
    // Source = causer of the effect (source is something else that applied the effect to us)
    // Target = target of the effect (owner of this AS - us, in this context)
 
+   /** Get Source's info */
    // Get our effect context
    const FGameplayEffectContextHandle EffectContextHandle = Data.EffectSpec.GetContext();
    // Get the ASC from the source of this GE
@@ -68,7 +69,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
    
    // Since we're doing a lot of accessing pointers, we need to add some checks because not all sources might have ASC or AvatarActor.
    // TSharedPtr is a struct that has its own utilities, so we can use . operator to call those utilities. Then, once checked if that
-   //  wrapper is valid, we can also use the -> operator to check if the poniter itself is valid.
+   //  wrapper is valid, we can also use the -> operator to check if the pointer itself is valid.
    if (IsValid(SourceASC) && SourceASC->AbilityActorInfo.IsValid() && SourceASC->AbilityActorInfo->AvatarActor.IsValid())
    {
       // With the SourceASC, we can get other things such as the source actor that owns the ASC
