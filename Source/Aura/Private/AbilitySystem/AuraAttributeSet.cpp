@@ -9,6 +9,7 @@
 /** PostGameplayEffectExecute */
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -98,8 +99,19 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
       }
    }
    
-
-   
+   /** Get Target's info */
+   // Get the target's avatar actor, but do the necessary checks before since we access a bunch of pointers before finally getting the actor.
+   // For the checks we use the pointer wrapper utilities functions .IsValid()
+   if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
+   {
+      AActor* TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+      // We can also get the target's controller
+      AController* TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+      // We can also get the character
+      ACharacter* TargetCharacter = Cast<ACharacter>(TargetActor);
+      // We could access the ASC directly, but we can also access through the interface, or even with the UAbilitySystemBlueprintLibrary
+      UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+   }
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
