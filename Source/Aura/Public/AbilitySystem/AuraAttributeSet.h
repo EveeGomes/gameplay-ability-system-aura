@@ -45,6 +45,8 @@ struct FEffectProperties
 	AController* TargetController = nullptr;
 	UPROPERTY()
 	ACharacter* TargetCharacter = nullptr;
+
+
 };
 
 
@@ -146,4 +148,8 @@ public:
 	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+private:
+	/** Fill in the data in the FEffectProperties */
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };

@@ -55,63 +55,68 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
    }
 }
 
-void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
 {
-   Super::PostGameplayEffectExecute(Data);
-
    // Source = causer of the effect (source is something else that applied the effect to us)
    // Target = target of the effect (owner of this AS - us, in this context)
 
    /** Get Source's info */
    // Get our effect context
-   const FGameplayEffectContextHandle EffectContextHandle = Data.EffectSpec.GetContext();
+   Props.EffectContextHandle = Data.EffectSpec.GetContext();
    // Get the ASC from the source of this GE
-   const UAbilitySystemComponent* SourceASC = EffectContextHandle.GetInstigatorAbilitySystemComponent();
-   
+   Props.SourceASC = Props.EffectContextHandle.GetInstigatorAbilitySystemComponent();
+
    // Since we're doing a lot of accessing pointers, we need to add some checks because not all sources might have ASC or AvatarActor.
    // TSharedPtr is a struct that has its own utilities, so we can use . operator to call those utilities. Then, once checked if that
    //  wrapper is valid, we can also use the -> operator to check if the pointer itself is valid.
-   if (IsValid(SourceASC) && SourceASC->AbilityActorInfo.IsValid() && SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+   if (IsValid(Props.SourceASC) && Props.SourceASC->AbilityActorInfo.IsValid() && Props.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
    {
       // With the SourceASC, we can get other things such as the source actor that owns the ASC
       // AvatarActor is a pointer wrapper, so we have to call .Get() on that
-      AActor* SourceAvatarActor = SourceASC->AbilityActorInfo->AvatarActor.Get();
+      Props.SourceAvatarActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
 
       // Get (and store) the source's player controller (if the source has one) -> changed to AController (instead of APlayerController) because
       //  Pawn->GetController() returns a AController and for now we don't need a PlayerController so we can avoid another cast. That could change
       //  later if needed.
-      const AController* SourceController = SourceASC->AbilityActorInfo->PlayerController.Get();
+      Props.SourceController = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
       // Now, in case the AbilityActorInfo has a nullptr for the PlayerController, we can fallback on getting the player controller from
       //  the actor itself by casting it to a pawn. The source might not be a pawn, so we're only setting if we can.
-      if (SourceController == nullptr && SourceAvatarActor != nullptr)
+      if (Props.SourceController == nullptr && Props.SourceAvatarActor != nullptr)
       {
          // attempt to get the player controller from the pawn directly!
          // Cast the avatar actor to a pawn and try to get the player controller from that pawn
-         if (const APawn* Pawn = Cast<APawn>(SourceAvatarActor))
+         if (const APawn* Pawn = Cast<APawn>(Props.SourceAvatarActor))
          {
-            SourceController = Pawn->GetController();
+            Props.SourceController = Pawn->GetController();
          }
       }
-      if (SourceController)
+      if (Props.SourceController)
       {
          // Get the source character by casting the pawn possessed by the controller
-         ACharacter* SourceCharacter = Cast<ACharacter>(SourceController->GetPawn());
+         Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
       }
    }
-   
+
    /** Get Target's info */
    // Get the target's avatar actor, but do the necessary checks before since we access a bunch of pointers before finally getting the actor.
    // For the checks we use the pointer wrapper utilities functions .IsValid()
    if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
    {
-      AActor* TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+      Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
       // We can also get the target's controller
-      AController* TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+      Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
       // We can also get the character
-      ACharacter* TargetCharacter = Cast<ACharacter>(TargetAvatarActor);
+      Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
       // We could access the ASC directly, but we can also access through the interface, or even with the UAbilitySystemBlueprintLibrary
-      UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetAvatarActor);
+      Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
    }
+}
+
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+   Super::PostGameplayEffectExecute(Data);
+
+   
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
@@ -134,3 +139,5 @@ void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) 
 {
    GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
 }
+
+
