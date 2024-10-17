@@ -116,7 +116,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 {
    Super::PostGameplayEffectExecute(Data);
 
-   
+   FEffectProperties Props;
+   SetEffectProperties(Data, Props);
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

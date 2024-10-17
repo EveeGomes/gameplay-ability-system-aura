@@ -141,4 +141,8 @@ protected:
 
 	/** Map ActiveGameplayEffectHandles to ASC pointers (key, value) */
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
+
+	/** Used when applying a GE. This will make an EffectActor more or less powerfull. It'll go as a param of MakeOutgoingSpec in ApplyEffectToTarget */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
+	float ActorLevel = 1.f;
 };

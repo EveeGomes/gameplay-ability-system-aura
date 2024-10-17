@@ -138,7 +138,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	// Store what object cause this effect
 	EffectContextHandle.AddSourceObject(this);
 	// Create a FGameEffectSpecHandle so it can be passed in ApplyGameplayEffectSpecToSelf().
-	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.f, EffectContextHandle);
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, ActorLevel, EffectContextHandle);
 	/** 
 	* EffectSpecHandle wrappes the Data (like other handles!), the real FGameplayEffectSpec. That Data is yet another wrapper, a TSharedPtr of type
 	*  FGameplayEffectSpec. So in ApplyGameplayEffectSpecToSelf, we need to pass a const reference of a FGameplayEffectSpec, and to get it we'll use
