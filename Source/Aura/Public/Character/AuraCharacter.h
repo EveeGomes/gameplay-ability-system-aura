@@ -17,7 +17,7 @@ class AURA_API AAuraCharacter : public AAuraCharacterBase
 public:
 	AAuraCharacter();
 
-	/** Being APawn Interface */
+	/** Begin APawn Interface */
 	// Init ability actor info for the Server
 	virtual void PossessedBy(AController* NewController) override;
 	// Init ability actor info for the Client
@@ -25,6 +25,7 @@ public:
 	/** End APawn Interface */
 
 private:
-	void InitAbilityActorInfo();
-
+	/** Begin AuraCharacterBase */
+	void InitAbilityActorInfo() override;
+	/** End AuraCharacterBase */
 };

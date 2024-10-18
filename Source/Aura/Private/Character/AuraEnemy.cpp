@@ -54,6 +54,11 @@ void AAuraEnemy::BeginPlay()
 {
    Super::BeginPlay();
 
+   InitAbilityActorInfo();
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
    // Initialize Actor Info
    AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
