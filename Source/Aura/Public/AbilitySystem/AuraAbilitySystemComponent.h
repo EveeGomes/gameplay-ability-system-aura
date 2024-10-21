@@ -7,6 +7,16 @@
 #include "AuraAbilitySystemComponent.generated.h"
 
 /**
+* Make a delegate to broadcast the Gameplay Asset Tags added to a GE in their BP!
+* We don't mean to bind this delegate from BP. Our widgets aren't going to bind to this delegate, it's our WidgetController!
+* When declaring the delegate, after the name we put the param (or params) it'll receive, but we don't put the name of that param, only its type
+*  so to help we can add an inline comment to tell what that param is.
+* So, this ASC needs to have this delegate we've just created the signature, while our WidgetController needs to be able to bind to it, so we'll
+*  make it public! Now, any class that binds to EffectAssetTags delegate will receive a TagContainer filled with asset tags!
+*/
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /*AssetTags*/);
+
+/**
  * 
  */
 UCLASS()
@@ -29,6 +39,9 @@ public:
 	*  that our ASC doesn't know about the character, in order to keep the dependency one-way.
 	*/
 	void AbilityActorInfoSet();
+
+	/* Broadcast asset tags from EffectApplied() */
+	FEffectAssetTags EffectAssetTags;
 
 protected:
 	/** Begin UAbilitySystemComponent */

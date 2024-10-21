@@ -25,6 +25,9 @@ void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Ability
    FGameplayTagContainer TagContainer;
    EffectSpec.GetAllAssetTags(TagContainer);
 
+   // Broadcast asset tags
+   EffectAssetTags.Broadcast(TagContainer);
+
    // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
    for (const FGameplayTag& Tag : TagContainer)
    {
