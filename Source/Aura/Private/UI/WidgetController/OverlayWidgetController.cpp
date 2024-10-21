@@ -3,8 +3,9 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
-/** */
+/** BindCallbacksToDependencies() */
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -68,6 +69,27 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
       AuraAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+
+   /** 
+   * Get AuraASC to bind to its delegate: EFfectAssetTags.
+   * To bind to it, we need a callback function. But we can also use a Lambda which is an anonymous function (it doesn't have a name, doesn't get
+   *  declared anywhere, isn't a member function... it's just a function we can define where we want some functionality to happen). The signature
+   *  for a lambda is basically: [](@input parameter list){//whatever this function does}
+   * This WidgetController is receiving the data from our ASC and parsing this data to do something, which for now is looping through the container
+   *  and printing to the screen!
+   */
+   Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+      [](const FGameplayTagContainer& AssetTags) {
+
+         // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
+         for (const FGameplayTag& Tag : AssetTags)
+         {
+            // Broadcast tag(s) to the WidgetController
+            const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
+            GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
+         }
+      }
+   );
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const

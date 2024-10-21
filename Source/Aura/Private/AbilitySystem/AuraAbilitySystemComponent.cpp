@@ -25,16 +25,7 @@ void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Ability
    FGameplayTagContainer TagContainer;
    EffectSpec.GetAllAssetTags(TagContainer);
 
-   // Broadcast asset tags
+   // Broadcast asset tags. This happens in response to having any effect applied to this ASC!
+   // The WidgetController will be responsible for parsing the data (in our case the OverlayWidgetController)
    EffectAssetTags.Broadcast(TagContainer);
-
-   // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
-   for (const FGameplayTag& Tag : TagContainer)
-   {
-      // TODO: Broadcast the tag to the WidgetController
-      // format a string before passing as a debug message. By using ToString method in Tag, we need to use * so the string is converted to
-      //  a wide character array (array of TChars to be exact)
-      const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
-      GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
-   }
 }
