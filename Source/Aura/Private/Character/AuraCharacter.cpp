@@ -54,6 +54,8 @@ void AAuraCharacter::InitAbilityActorInfo()
    check(AuraPlayerState);
    // Tell ASC who are the Owner Actor, and Avatar Actor
    AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+   // Call AbilityActorInfoSet() from AuraAbilitySystemComponent class, so it knows the ASC has been set!
+   Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 
    // Set ASC and AttributeSet pointers
    AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();

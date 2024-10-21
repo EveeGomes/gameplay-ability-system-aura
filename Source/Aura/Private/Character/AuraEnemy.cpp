@@ -61,4 +61,6 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
    // Initialize Actor Info
    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+   // Call AbilityActorInfoSet() from AuraAbilitySystemComponent class, so it knows the ASC has been set!
+   Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

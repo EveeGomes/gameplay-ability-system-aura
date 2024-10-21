@@ -22,6 +22,14 @@ class AURA_API UAuraAbilitySystemComponent : public UAbilitySystemComponent
 *  to let it know it's time to bind to any delegate it wants to bind to.
 */
 
+public:
+	/** 
+	* When this function is called, we know the AbilityActorInfo has been set. This way the ASC can do important things such as bind to delegates safely.
+	* We've added the call in both AuraEnemy and AuraCharacter. However, once we do that now the character is dependent on the ASC. So we gotta make sure
+	*  that our ASC doesn't know about the character, in order to keep the dependency one-way.
+	*/
+	void AbilityActorInfoSet();
+
 protected:
 	/** Begin UAbilitySystemComponent */
 	// Callback to bind to the multicast delegate on UASC class of type FOnGameplayEffectAppliedDelegate
