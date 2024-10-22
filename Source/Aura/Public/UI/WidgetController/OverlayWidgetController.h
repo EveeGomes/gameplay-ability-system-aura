@@ -103,4 +103,17 @@ protected:
 	// Mana
 	void ManaChanged(const FOnAttributeChangeData& Data) const;
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
+
+	/** 
+	* Returns any type of DataTable (DT) roll by using a DataTable and a Tag.
+	* This function is more versitle than what this class needs, so it's a good example of a function that could be placed in a static class.
+	*/
+	template<typename T>
+	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 };
+
+template<typename T>
+T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
+{
+	return DataTable->FindRow<T>(Tag.GetTagName, TEXT(""));
+}

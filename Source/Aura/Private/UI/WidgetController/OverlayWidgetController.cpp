@@ -86,6 +86,12 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
    */
    Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
       [](const FGameplayTagContainer& AssetTags) {
+         /** 
+         * Make a look up in our widget data table:
+         * Find the data table row that corresponds to the gameplay tag (in our case each element in the GTContainer). So, we'd like to take a DT
+         *  and a GT, and return the row. We'll then create a function that'll be versitle and return any sort of roll, DT roll... by just taking
+         *  a generic table and a GT.
+         */
 
          // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
          for (const FGameplayTag& Tag : AssetTags)
