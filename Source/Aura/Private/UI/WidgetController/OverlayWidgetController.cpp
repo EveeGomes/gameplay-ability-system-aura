@@ -77,6 +77,12 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
    *  for a lambda is basically: [](@input parameter list){//whatever this function does}
    * This WidgetController is receiving the data from our ASC and parsing this data to do something, which for now is looping through the container
    *  and printing to the screen!
+   * 
+   * Now, we'd like to use the tags and broadcast information the our widgets can receive. Rather than broadcasting a GT up to the widget side, we
+   *  could have an asset that can look up information that we can broadcast to the widget. Eg: we can have an asset like a data table that can 
+   *  look things up by tag (by GT), and retrieve some kind of information, like a struct, that we can pass up to the widgets.
+   * We'll create a data table that has information related to GTs specifically to show messages to the screen. The row structute will be defined 
+   *  here in C++ as a struct, in the .h file of this class.
    */
    Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
       [](const FGameplayTagContainer& AssetTags) {
