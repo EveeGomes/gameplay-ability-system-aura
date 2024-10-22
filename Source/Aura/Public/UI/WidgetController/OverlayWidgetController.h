@@ -12,6 +12,7 @@
 /** Forward Declaration */
 struct FOnAttributeChangeData;
 class UAuraUserWidget;
+class UDataTable;
 
 /** 
 * Add/Make dynamic multicast delegates to broadcast any change in attributes. Events will be bound to these delegates to let us perform other
@@ -88,6 +89,13 @@ public:
 	FOnMaxManaChangedSignature OnMaxManaChanged;
 
 protected:
+	/** 
+	* Get access to the message DT so it can be used in the lambda bound to EffectAssetTags in BindCallbacksToDependencies() to perform
+	*  some kind of look up and broadcast data from that DT up to widgets.
+	*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
+	TObjectPtr<UDataTable> MessageWidgetDataTable;
+	
 	/** Callbacks to bind to delegates that broadcast changes to attributes */
 	// Health
 	void HealthChanged(const FOnAttributeChangeData& Data) const;
