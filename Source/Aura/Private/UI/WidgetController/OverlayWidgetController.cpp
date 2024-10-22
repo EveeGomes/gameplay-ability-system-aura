@@ -85,12 +85,17 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
    *  here in C++ as a struct, in the .h file of this class.
    */
    Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-      [](const FGameplayTagContainer& AssetTags) {
+      [this](const FGameplayTagContainer& AssetTags) {
          /** 
          * Make a look up in our widget data table:
          * Find the data table row that corresponds to the gameplay tag (in our case each element in the GTContainer). So, we'd like to take a DT
          *  and a GT, and return the row. We'll then create a function that'll be versitle and return any sort of roll, DT roll... by just taking
          *  a generic table and a GT.
+         * For our lambda to work, we need to capture the object we're currently in, ie this, since it has the templated function and now the code
+         *  can work. We just need a pointer to this, which we achieve by simply adding the keyword 'this' into []. So, i.e. if we want to use a 
+         *  member function of an object in a lambda, we need to capture that object of the class that the function belongs to.
+         * So, we'll use the template function, GetDataTableRowByTag() to get the DT row, store that DT row so that we can send it up to a widget 
+         *  (broadcast it up to the widget). I.e. we want a delegate that can send through an FUIWidgetRow.
          */
 
          // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
@@ -99,6 +104,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
             // Broadcast tag(s) to the WidgetController
             const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
             GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
+
+            FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
          }
       }
    );
