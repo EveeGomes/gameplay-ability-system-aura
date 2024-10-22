@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Engine/DataTable.h"
+#include "GameplayTagContainer.h"
+
 #include "CoreMinimal.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
@@ -32,17 +35,17 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature, float, N
 
 /* Row structure of data table to hold information about GTs */
 USTRUCT(BlueprintType)
-struct FUIWidgetRow : FTableRowBase
+struct FUIWidgetRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	/* Used to display messages to the screen */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FGameplayTag MessageTag = FGameplayTag{}; // make sure it's initialized. In this case it's initialized to an empty FGameplayTag
+	FGameplayTag MessageTag = FGameplayTag(); // make sure it's initialized. In this case it's initialized to an empty FGameplayTag
 	
 	/* Message to display. As for widgets, when displaying text to the user in the form of widgets, we use FText */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText Message = FText{};
+	FText Message = FText();
 
 	/* Have a widget class so that we can create and show to the screen any kind of widget depending on the GT we receive in the form of a GE */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
