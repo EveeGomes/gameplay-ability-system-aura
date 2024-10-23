@@ -14,6 +14,32 @@ struct FOnAttributeChangeData;
 class UAuraUserWidget;
 class UDataTable;
 
+/* Row structure of data table to hold information about GTs */
+USTRUCT(BlueprintType)
+struct FUIWidgetRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	/* Used to display messages to the screen */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTag MessageTag = FGameplayTag(); // make sure it's initialized. In this case it's initialized to an empty FGameplayTag
+
+	/* Message to display. As for widgets, when displaying text to the user in the form of widgets, we use FText */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText Message = FText();
+
+	/* Have a widget class so that we can create and show to the screen any kind of widget depending on the GT we receive in the form of a GE */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UAuraUserWidget> MessageWidget;
+
+	/**
+	* This message widget may or may not want to have an image associated with it... or any other data we'd like to pass up, if we wanted to harvest
+	*  more data, such as the magnitude of the modifier. For this we'll add an image that can be optional.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* Image = nullptr;
+};
+
 /** 
 * Add/Make dynamic multicast delegates to broadcast any change in attributes. Events will be bound to these delegates to let us perform other
 *  updates as needed.
@@ -34,31 +60,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float,
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature, float, NewMana);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature, float, NewMaxMana);
 
-/* Row structure of data table to hold information about GTs */
-USTRUCT(BlueprintType)
-struct FUIWidgetRow : public FTableRowBase
-{
-	GENERATED_BODY()
-
-	/* Used to display messages to the screen */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FGameplayTag MessageTag = FGameplayTag(); // make sure it's initialized. In this case it's initialized to an empty FGameplayTag
-	
-	/* Message to display. As for widgets, when displaying text to the user in the form of widgets, we use FText */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText Message = FText();
-
-	/* Have a widget class so that we can create and show to the screen any kind of widget depending on the GT we receive in the form of a GE */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UAuraUserWidget> MessageWidget;
-
-	/** 
-	* This message widget may or may not want to have an image associated with it... or any other data we'd like to pass up, if we wanted to harvest
-	*  more data, such as the magnitude of the modifier. For this we'll add an image that can be optional.
-	*/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UTexture2D* Image = nullptr;
-};
+// Delegate to send out messages from a DT
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
 
 
 /**
