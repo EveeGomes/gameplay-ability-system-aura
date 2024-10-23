@@ -105,8 +105,9 @@ protected:
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
 
 	/** 
-	* Returns any type of DataTable (DT) roll by using a DataTable and a Tag.
-	* This function is more versitle than what this class needs, so it's a good example of a function that could be placed in a static class.
+	* Returns any type of DataTable (DT) row by using a DataTable and a Tag.
+	* This function is more versitle than what this class needs, so it's a good example of a function that could be placed in a static class (as a 
+	*  static function library).
 	*/
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
