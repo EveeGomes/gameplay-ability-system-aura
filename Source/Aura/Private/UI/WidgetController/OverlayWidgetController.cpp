@@ -74,7 +74,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
    * Get AuraASC to bind to its delegate: EFfectAssetTags.
    * To bind to it, we need a callback function. But we can also use a Lambda which is an anonymous function (it doesn't have a name, doesn't get
    *  declared anywhere, isn't a member function... it's just a function we can define where we want some functionality to happen). The signature
-   *  for a lambda is basically: [](@input parameter list){//whatever this function does}
+   *  for a lambda is basically: [capture(s)](@input parameter list){//whatever this function does}
    * This WidgetController is receiving the data from our ASC and parsing this data to do something, which for now is looping through the container
    *  and printing to the screen!
    * 
@@ -96,6 +96,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
          *  member function of an object in a lambda, we need to capture that object of the class that the function belongs to.
          * So, we'll use the template function, GetDataTableRowByTag() to get the DT row, store that DT row so that we can send it up to a widget 
          *  (broadcast it up to the widget). I.e. we want a delegate that can send through an FUIWidgetRow.
+         * "A delegate broadcasts something and then another thing that needs the data that's been broadcasted, bind to the delegate to receive it!"
          */
 
          // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
