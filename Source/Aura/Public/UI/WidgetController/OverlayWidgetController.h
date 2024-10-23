@@ -91,6 +91,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnMaxManaChangedSignature OnMaxManaChanged;
 
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Messages")
+	FMessageWidgetRowSignature MessageWidgetRowDelegate;
+
 protected:
 	/** 
 	* Get access to the message DT so it can be used in the lambda bound to EffectAssetTags in BindCallbacksToDependencies() to perform

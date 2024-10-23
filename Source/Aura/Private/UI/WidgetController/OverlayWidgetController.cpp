@@ -97,17 +97,29 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
          * So, we'll use the template function, GetDataTableRowByTag() to get the DT row, store that DT row so that we can send it up to a widget 
          *  (broadcast it up to the widget). I.e. we want a delegate that can send through an FUIWidgetRow.
          * "A delegate broadcasts something and then another thing that needs the data that's been broadcasted, bind to the delegate to receive it!"
+         * 
+         * Now, we need to enforce this functionality to only happen when we have a Message tag, since a tag container could and might have other
+         *  types of GTs. We'll use a function from FGameplayTag class, MatchesTag that returns true if the tag belongs to a hierarchy but is in a
+         *  lower level than the tag we're comparing to. Otherwise it would return false. For example, taking the comment from the class, we have:
+         *  "A.1".MatchesTag("A") will return True, "A".MatchesTag("A.1") will return False. Changing the names to Message.HealthPotion and Message:
+         *  "Message.HealthPotion".MatchesTag("Message") will return True, "Message".MatchesTag("Message.HealthPotion") will return False
          */
 
          // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
          for (const FGameplayTag& Tag : AssetTags)
          {
+
+            FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+            Tag.MatchesTag(MessageTag);
+
             // Broadcast tag(s) to the WidgetController
             const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
             GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
 
             /* Perform a look up to find the row in the DT that correspond to the tag */
             FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+            /* Broadcast the row */
+            MessageWidgetRowDelegate.Broadcast(*Row);
          }
       }
    );
