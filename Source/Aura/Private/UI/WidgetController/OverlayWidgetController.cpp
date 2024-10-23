@@ -108,18 +108,15 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
          // Broadcast the GTs associated with the GE (we added those tags in the GE BP)
          for (const FGameplayTag& Tag : AssetTags)
          {
-
+            /* Check if the Tag belongs to a Message root GT before looking for the row and broadcasting this row */
             FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
-            Tag.MatchesTag(MessageTag);
-
-            // Broadcast tag(s) to the WidgetController
-            const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
-            GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
-
-            /* Perform a look up to find the row in the DT that correspond to the tag */
-            FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
-            /* Broadcast the row */
-            MessageWidgetRowDelegate.Broadcast(*Row);
+            if (Tag.MatchesTag(MessageTag))
+            {
+               /* Perform a look up to find the row in the DT that correspond to the tag */
+               const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+               /* Broadcast the row */
+               MessageWidgetRowDelegate.Broadcast(*Row);
+            }
          }
       }
    );
