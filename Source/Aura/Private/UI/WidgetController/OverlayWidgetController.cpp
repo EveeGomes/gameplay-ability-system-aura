@@ -59,16 +59,40 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
    const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(AttributeSet);
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-      AuraAttributeSet->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::HealthChanged);
+      AuraAttributeSet->GetHealthAttribute()).AddLambda(
+         [this](const FOnAttributeChangeData& Data)
+         {
+            /**
+            * All we want to do when the health changes is to broadcast the value through OnHealthChanged delegate, so the widgets can respond to it.
+            * We use Data.NewValue to get the value that has just changed (instead of using AuraAttributeSet->GetHealth()).
+            */
+            OnHealthChanged.Broadcast(Data.NewValue);
+         }
+      );
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-      AuraAttributeSet->GetMaxHealthAttribute()).AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
+      AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
+         [this](const FOnAttributeChangeData& Data)
+         {
+            OnMaxHealthChanged.Broadcast(Data.NewValue);
+         }
+      );
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-      AuraAttributeSet->GetManaAttribute()).AddUObject(this, &UOverlayWidgetController::ManaChanged);
+      AuraAttributeSet->GetManaAttribute()).AddLambda(
+         [this](const FOnAttributeChangeData& Data)
+         {
+            OnManaChanged.Broadcast(Data.NewValue);
+         }
+      );
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-      AuraAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+      AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
+         [this](const FOnAttributeChangeData& Data)
+         {
+            OnMaxManaChanged.Broadcast(Data.NewValue);
+         }
+      );
 
    /** 
    * Get AuraASC to bind to its delegate: EFfectAssetTags.
@@ -85,7 +109,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
    *  here in C++ as a struct, in the .h file of this class.
    */
    Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-      [this](const FGameplayTagContainer& AssetTags) {
+      [this](const FGameplayTagContainer& AssetTags) 
+      {
          /** 
          * Make a look up in our widget data table:
          * Find the data table row that corresponds to the gameplay tag (in our case each element in the GTContainer). So, we'd like to take a DT
