@@ -54,9 +54,27 @@ void UOverlayWidgetController::BroadcastInitialValues()
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
    // No need to call Super (it's empty)
-   
-   /** Bind callback function to be called whenever the attribute, related to it, changes. */
+
+   /** Bind callback functions/lambads to be called whenever the attribute related to it changes. */
+
    const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(AttributeSet);
+
+   /** 
+   * Suggestion from a user in L62: using macro to reduce repetitive code (many other suggestions!)
+   * https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg/learn/lecture/39783730#questions/20820728
+   
+   #define BIND_CALLBACKS(AttributeName) AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->Get##AttributeName##Attribute()).AddLambda( \
+   [this](const FOnAttributeChangeData& Data) \
+   {\
+      On##AttributeName##Changed.Broadcast(Data.NewValue); \
+   });
+
+   BIND_CALLBACKS(Health);
+   BIND_CALLBACKS(MaxHealth);
+   BIND_CALLBACKS(Mana);
+   BIND_CALLBACKS(MaxMana);
+   #undef BIND_CALLBACKS
+   */
 
    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
       AuraAttributeSet->GetHealthAttribute()).AddLambda(
