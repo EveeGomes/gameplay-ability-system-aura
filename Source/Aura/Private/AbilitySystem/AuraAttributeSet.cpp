@@ -41,7 +41,13 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
    /** 
-   * NewValue comes from a calculation from GE 
+   * NewValue comes from our modifier on the GE that's being applied.
+   * Then, we're clamping it before the attribute changes. However, that clamp isn't going to permanentely change that modifier! It just changes
+   *  the value that is being returned from querying that modifier. And in case there's another GE with its own modifier queried, then it's going
+   *  to recalculate the value from current value! I.E. it's kind of like the value was never actually clamped... We clamped before the attribute
+   *  changes, but that modifier recalculates. This just changes the value returned from querying the modifier.
+   * So, to solve this we should clamp again, but in this case we should do it in PostGameplayEffectExecute() as this is called after the GE has
+   *  already been applied. There will only be a single replication resulting from the attributes values.
    */
 
    Super::PreAttributeChange(Attribute, NewValue);
@@ -124,13 +130,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
    SetEffectProperties(Data, Props);
 
    /** 
-   * Check if the attribute that's being changed is the one that's being affected (in our example: health)
+   * Check if the attribute that's being changed is the one that's being affected (in our example: health). If so, clamp it again as changes here
+   *  happens to the BaseValue rather than to CurrentValue as in PreAttributeChange() (where we were only changing the NewValue).
    */
    if (Data.EvaluatedData.Attribute == GetHealthAttribute())
    {
       GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, FString::Printf(TEXT("Health: %f"), GetHealth()));
+      SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
    }
-
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
