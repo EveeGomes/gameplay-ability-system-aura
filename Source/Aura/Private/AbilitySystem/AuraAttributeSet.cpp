@@ -40,6 +40,10 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
+   /** 
+   * NewValue comes from a calculation from GE 
+   */
+
    Super::PreAttributeChange(Attribute, NewValue);
 
    // Check if Attribute matches any of our attributes
@@ -118,6 +122,15 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
    FEffectProperties Props;
    SetEffectProperties(Data, Props);
+
+   /** 
+   * Check if the attribute that's being changed is the one that's being affected (in our example: health)
+   */
+   if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+   {
+      GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, FString::Printf(TEXT("Health: %f"), GetHealth()));
+   }
+
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
