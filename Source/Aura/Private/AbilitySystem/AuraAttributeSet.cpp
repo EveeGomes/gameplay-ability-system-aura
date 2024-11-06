@@ -133,10 +133,15 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
    * Check if the attribute that's being changed is the one that's being affected (in our example: health). If so, clamp it again as changes here
    *  happens to the BaseValue rather than to CurrentValue as in PreAttributeChange() (where we were only changing the NewValue).
    */
+   // Clamp Health
    if (Data.EvaluatedData.Attribute == GetHealthAttribute())
    {
-      GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, FString::Printf(TEXT("Health: %f"), GetHealth()));
       SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+   }
+   // Clamp Mana
+   if (Data.EvaluatedData.Attribute == GetManaAttribute())
+   {
+      SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
    }
 }
 
