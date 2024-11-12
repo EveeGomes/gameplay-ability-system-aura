@@ -40,7 +40,7 @@ protected:
 	/** 
 	* Declare those pointers here since our player controlled character won't have them.
 	*/
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()

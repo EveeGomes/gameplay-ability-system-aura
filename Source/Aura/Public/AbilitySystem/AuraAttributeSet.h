@@ -122,6 +122,9 @@ public:
 
 	/**
 	* Primary Attributes
+	*
+	* To initialize these attributes using a data table, we need to expose the ASC to BP so we can set a specific asset, a data table, on that component.
+	* So, in AuraPlaterState, where our ASC variable is, we'll add VisibleAnywhere specifier to its UPROPERTY!
 	*/
 	// STRENGTH
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Primary Attributes")
