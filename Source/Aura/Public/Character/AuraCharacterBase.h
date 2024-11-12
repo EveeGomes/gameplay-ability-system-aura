@@ -2,6 +2,9 @@
 
 #pragma once
 
+/** */
+#include "GameplayEffect.h"
+
 /** Interface */
 #include "AbilitySystemInterface.h"
 
@@ -62,4 +65,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfo();
+
+	/** 
+	* Gameplay Effect and function to initialize Primary Attributes from AuraAttributeSet
+	*/
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+
+	void InitilizePrimaryAttributes();
 };

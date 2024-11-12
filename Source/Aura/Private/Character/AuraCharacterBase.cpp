@@ -1,5 +1,6 @@
 // Copyright Eveline Gomes.
 
+#include "AbilitySystemComponent.h"
 
 #include "Character/AuraCharacterBase.h"
 
@@ -28,4 +29,21 @@ void AAuraCharacterBase::BeginPlay()
 
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
+}
+
+void AAuraCharacterBase::InitilizePrimaryAttributes()
+{
+	/** 
+	* If we're gonna call ApplyGameplayEffectSpecToSelf or ToTarget or something similar, we'll need a GameplayEffectSpec to apply.
+	* So, we'll access that function through the ASC, and create a GameplayEffectSpec 
+	* (https://github.com/tranek/GASDocumentation/blob/master/README.md#459-gameplay-effect-spec) to pass to it as one of its params.
+	* At the end we'll have a GameplayEffectSpec to a target ASC (the one we specify)
+	*/
+	
+	// Make a ContextHandle to be used when creating a GameplayEffectSpec
+	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	// Create a GameplayEffectSpec
+	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.f, ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+
 }

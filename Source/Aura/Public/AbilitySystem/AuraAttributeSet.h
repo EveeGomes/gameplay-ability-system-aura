@@ -125,6 +125,10 @@ public:
 	*
 	* To initialize these attributes using a data table, we need to expose the ASC to BP so we can set a specific asset, a data table, on that component.
 	* So, in AuraPlaterState, where our ASC variable is, we'll add VisibleAnywhere specifier to its UPROPERTY!
+	* 
+	* The other way (and preferable way) is to initialize the attributes using a gameplay effect (GE). We'll do that through a function that'll
+	*  apply this GE.
+	* The function will be added on the character, AuraCharacterBase. It can have some sort of default primary attributes GE.
 	*/
 	// STRENGTH
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Primary Attributes")
