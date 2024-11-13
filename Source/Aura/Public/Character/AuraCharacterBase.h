@@ -72,5 +72,5 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
-	void InitilizePrimaryAttributes();
+	void InitilizePrimaryAttributes() const;
 };
