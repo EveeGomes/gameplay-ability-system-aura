@@ -1,9 +1,6 @@
 // Copyright Eveline Gomes.
-
 #pragma once
 
-/** */
-#include "GameplayEffect.h"
 
 /** Interface */
 #include "AbilitySystemInterface.h"
@@ -15,7 +12,7 @@
 /** Forward Declaration */
 class UAbilitySystemComponent;
 class UAttributeSet;
-
+class UGameplayEffect;
 
 /** 
 * Adding IAbilitySystemInterface will allow us to check any actor to see if they have this interface, so we can use the overriden

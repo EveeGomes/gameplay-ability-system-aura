@@ -1,8 +1,7 @@
 // Copyright Eveline Gomes.
+#include "Character/AuraCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
-
-#include "Character/AuraCharacterBase.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -42,6 +41,11 @@ void AAuraCharacterBase::InitilizePrimaryAttributes() const
 	* Since we're using an ASC and a UClass pointer (DefaultPrimaryAttributes), we should check assert them to make sure we're not using nullptr
 	* 
 	* Now that we have this function, where do we call it? It'll depend on the circumstances, if we're in AuraCharacter or AuraEnemy for example.
+	* In AuraCharacter, we'd only need to apply this GE on the server side. That's because all those attributes are marked to be replicated, so if we
+	*  change them on the server, they'll change on the clients as well! But, if we wanted to add it to the client side so it wouldn't have to wait
+	*  for the values to be replicated, that's fine too... both ways would work just fine! Therefore, this function will be called in 
+	*  InitAbilityActorInfo() (which is called in both server and client sides). Then, all we need is to make sure we have the effect and that we
+	*  have configured some default values (we'll do it on BP side).
 	*/
 	check(IsValid(GetAbilitySystemComponent()));
 	check(DefaultPrimaryAttributes);

@@ -52,6 +52,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 {
    AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
    check(AuraPlayerState);
+
    // Tell ASC who are the Owner Actor, and Avatar Actor
    AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
    // Call AbilityActorInfoSet() from AuraAbilitySystemComponent class, so it knows the ASC has been set!
@@ -86,4 +87,7 @@ void AAuraCharacter::InitAbilityActorInfo()
          AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
       }
    }
+
+   // Initialize primary attributes as we know the ASC is valid at this point
+   InitilizePrimaryAttributes();
 }
