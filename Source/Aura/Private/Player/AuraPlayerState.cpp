@@ -3,6 +3,9 @@
 
 #include "Player/AuraPlayerState.h"
 
+/** GetLifetimeReplicatedProps - macro to mark variables as replicated */
+#include "Net/UnrealNetwork.h"
+
 /** GAS classes */
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
@@ -41,7 +44,19 @@ AAuraPlayerState::AAuraPlayerState()
    NetUpdateFrequency = 100.f;
 }
 
+void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+   Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+   DOREPLIFETIME(AAuraPlayerState, Level);
+}
+
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
    return AbilitySystemComponent;
+}
+
+void AAuraPlayerState::OnRep_Level(int32 OldLevel)
+{
+
 }

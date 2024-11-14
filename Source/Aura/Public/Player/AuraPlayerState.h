@@ -28,6 +28,9 @@ class AURA_API AAuraPlayerState : public APlayerState, public IAbilitySystemInte
 
 public:
 	AAuraPlayerState();
+	
+	// Mark variables to be replicated
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// GETTERS:
 	/** Begin IAbilitySystemInterface Interface */
@@ -46,4 +49,20 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
+private:
+
+	/** 
+	* Level is going to be replicated. It needs to have its own Rep Notify so we can show it in the HUD, and broadcast it whenever it's replicated!
+	* So, in order to replicate anything, we shall override GetLifetimeReplicatedProps() method!
+	* Then, we add the Level Rep Notify function, which must be a UFUNCTION to be considered a rep notify.
+	* Finally, Level can be marked as replicated by adding to its UPROPERTY the specifier ReplicatedUsing.
+	* 
+	* This variable reside here, but this should be the case only for the player controlled character. For enemies, it should be on the Enemy Character
+	*  class: AuraEnemy.
+	*/
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Level)
+	int32 Level = 1;
+
+	UFUNCTION()
+	void OnRep_Level(int32 OldLevel);
 };
