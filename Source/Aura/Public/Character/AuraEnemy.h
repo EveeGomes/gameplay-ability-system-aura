@@ -32,8 +32,6 @@ protected:
 	void InitAbilityActorInfo() override;
 	/** End AuraCharacterBase */
 
-private:
-
 	/** 
 	* For enemy character, we don't need to replicate this Level varibale. That is because we're only concerned with checking the level on the server 
 	*  for AI controlled enemies. And that's because important things that will require that level in calculations will only be done on the server.
