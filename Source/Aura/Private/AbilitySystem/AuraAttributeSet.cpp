@@ -56,6 +56,10 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
+   // IMPORTANT: remove clamping from this function. Remove this function then?
+   // https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg/learn/lecture/39784058#questions/20594972
+
+
    /** 
    * NewValue comes from our modifier on the GE that's being applied.
    * Then, we're clamping it before the attribute changes. However, that clamp isn't going to permanentely change that modifier! It just changes
@@ -68,17 +72,17 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 
    Super::PreAttributeChange(Attribute, NewValue);
 
-   // Check if Attribute matches any of our attributes
-   if (Attribute == GetHealthAttribute())
-   {
-      // Avoid Health to ever go above MaxHealth value or below 0
-      NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
-   }
-   if (Attribute == GetManaAttribute())
-   {
-      // Avoid Mana to ever go above MaxMana or below 0
-      NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
-   }
+   //// Check if Attribute matches any of our attributes
+   //if (Attribute == GetHealthAttribute())
+   //{
+   //   // Avoid Health to ever go above MaxHealth value or below 0
+   //   NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
+   //}
+   //if (Attribute == GetManaAttribute())
+   //{
+   //   // Avoid Mana to ever go above MaxMana or below 0
+   //   NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana());
+   //}
 }
 
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const

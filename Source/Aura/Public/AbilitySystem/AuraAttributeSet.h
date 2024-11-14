@@ -95,6 +95,7 @@ public:
 	//  This function is used to do Campling, not to call other functionality. However, it doesn't permanently change the modifier, just the value
 	//  returned from querying the modifier. Later operations recalculate the current value from all modifiers, so we'll need to clamp again.
 	// https://github.com/tranek/GASDocumentation/blob/master/README.md#445-preattributechange
+	// Removed clamping: https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg/learn/lecture/39784058#questions/20594972
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
 	/** 
