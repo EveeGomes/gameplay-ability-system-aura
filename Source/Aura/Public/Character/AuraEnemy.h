@@ -25,6 +25,10 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	/** Begin Combat Interface */
+	virtual int32 GetPlayerLevel() override;
+	/** End Combat Interface */
+
 protected:
 	virtual void BeginPlay() override;
 

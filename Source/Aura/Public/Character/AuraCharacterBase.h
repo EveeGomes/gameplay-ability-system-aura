@@ -4,6 +4,7 @@
 
 /** Interface */
 #include "AbilitySystemInterface.h"
+#include "Interaction/CombatInterface.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -19,7 +20,7 @@ class UGameplayEffect;
 *  function to get that actor's ability system component!
 */
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 public:	

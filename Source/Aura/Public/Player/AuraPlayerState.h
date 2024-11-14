@@ -38,6 +38,7 @@ public:
 	/** End IAbilitySystemInterface Interface */
 
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	FORCEINLINE int32 GetPlayerLevel() const { return Level; }  
 
 protected:
 	/** 

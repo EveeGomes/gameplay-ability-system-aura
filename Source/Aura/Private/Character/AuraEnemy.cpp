@@ -50,6 +50,11 @@ void AAuraEnemy::Tick(float DeltaTime)
    Super::Tick(DeltaTime);
 }
 
+int32 AAuraEnemy::GetPlayerLevel()
+{
+    return Level;
+}
+
 void AAuraEnemy::BeginPlay()
 {
    Super::BeginPlay();
