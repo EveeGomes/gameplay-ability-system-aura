@@ -46,6 +46,14 @@ void AAuraCharacterBase::InitilizePrimaryAttributes() const
 	*  for the values to be replicated, that's fine too... both ways would work just fine! Therefore, this function will be called in 
 	*  InitAbilityActorInfo() (which is called in both server and client sides). Then, all we need is to make sure we have the GE and that we
 	*  have configured some default values (we'll do it on BP side, in L66).
+	* Once we have all the secondary attributes, we should make them derived from their base attributes (it could be either primary or even secondary). 
+	* In this AuraCharacterBase class, we have a UGameplayEffect class for our primary attributes, DefaultPrimaryAttributes. So we could do the same
+	*  for our secondary attributes, DefaultSecondaryAttributes and now we'll have a class to apply. IT'S IMPORTANT that we initialize those secondary
+	*  attributes after the primary attributes have already been initialized, because they depend on the primary attributes! However, if the secondary
+	*  attributes are going to be infinite GE, then it'll always be in effect... whenever the primary attribute changes, the secondary attributes should
+	*  adjust accordingly!
+	* To apply this effect (DefaultSecondaryAttributes), we'll handle it in the character, AuraCharacter. Before that, we'll have yet another method
+	*  similar to InitializePrimaryAttributes, but now for secondary ones.
 	*/
 	check(IsValid(GetAbilitySystemComponent()));
 	check(DefaultPrimaryAttributes);
@@ -56,4 +64,14 @@ void AAuraCharacterBase::InitilizePrimaryAttributes() const
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.f, ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
 
+}
+
+void AAuraCharacterBase::InitializeSecondaryAttributes() const
+{
+	check(IsValid(GetAbilitySystemComponent()));
+	check(DefaultSecondaryAttributes);
+
+	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultSecondaryAttributes, 1.f, ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
 }
