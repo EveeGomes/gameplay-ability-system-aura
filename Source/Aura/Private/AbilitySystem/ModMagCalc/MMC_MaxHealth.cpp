@@ -25,7 +25,12 @@ UMMC_MaxHealth::UMMC_MaxHealth()
    VigorDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
    VigorDef.bSnapshot = false;
 
-
+   /** 
+   * Now, our Modifier Magnitude Calculation needs one of its variables, which is an array of attributes to capture, and we need to add VigorDef to it.
+   * This way, when the modifier is executed, when the effect is applied, we'll be sure to have VigorDef captured from the target at the time of
+   *  application. Then, we can acces it in CalculateBaseMagnitude_Implementation().
+   */
+   RelevantAttributesToCapture.Add(VigorDef);
 }
 
 float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
