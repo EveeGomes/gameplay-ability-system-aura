@@ -3,6 +3,9 @@
 /** To capture attributes */
 #include "AbilitySystem/AuraAttributeSet.h"
 
+/** Interface */
+#include "Interaction/CombatInterface.h"
+
 #include "AbilitySystem/ModMagCalc/MMC_MaxHealth.h"
 
 UMMC_MaxHealth::UMMC_MaxHealth()
@@ -63,4 +66,24 @@ float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffec
    GetCapturedAttributeMagnitude(VigorDef, Spec, EvaluationParameters, Vigor);
    Vigor = FMath::Max<float>(Vigor, 0.f);
 
+   /** 
+   * Now that we have Vigor, we need to get the player level as we want MaxHealth to be dependent not only on Vigor but also on the player's level.
+   * The purpose of creating the CombatInterface is so we can cast this GE source object to it. We can always get the source object of this GE,
+   *  from the Spec. In our case, the source object is going to be AuraCharacter.
+   * Once we have the CombatInterface pointer set, we can get the player level.
+   */
+
+   ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
+   const int32 PlayerLevel = CombatInterface->GetPlayerLevel();
+
+   /** 
+   * With both Vigor and Player level, we can finally decide what this function returns for this modifier calculation.
+   * The design chosen is to have a base value of 80.f plus 
+   *  the Vigor multiplied by 2.5 (so for every Vigor point we get 2.5) plus 
+   *  ten times the player level (for every PlayerLevel we get ten).
+   * This way, as the player levels up, maybe they gain some points that they can spend on their attributes and they upped their vigor.
+   * If they spend one point and up the vigor by one, then their MaxHealth will go up by 2.5. If the player levels up, their level goes from 1 to 2,
+   *  then they get ten more added to their MaxHealth.
+   */
+   return 80.f + 2.5 * Vigor + 10.f * PlayerLevel;
 }

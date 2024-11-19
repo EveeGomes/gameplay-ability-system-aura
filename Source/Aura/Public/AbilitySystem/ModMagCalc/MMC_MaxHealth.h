@@ -8,6 +8,7 @@
 
 /**
  * MaxHealth will be determined by the calculations created in this class!
+ * I.E. As we create the custom calculation, it can be used in a modifier for MaxHealth.
  */
 UCLASS()
 class AURA_API UMMC_MaxHealth : public UGameplayModMagnitudeCalculation
