@@ -30,7 +30,7 @@ public:
 private:
 	/** 
 	* ModMagCalc classes are also able to capture attributes. To do that we have to create a variable for the attribute we want to capture, and the
-	*  type is FGameplayEffectAttributeCaptureDefinition.
+	*  type is FGameplayEffectAttributeCaptureDefinition. That attribute will be capture in this class constructor.
 	*/
 	FGameplayEffectAttributeCaptureDefinition VigorDef;
 };
