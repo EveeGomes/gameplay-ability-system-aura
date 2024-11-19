@@ -35,5 +35,32 @@ UMMC_MaxHealth::UMMC_MaxHealth()
 
 float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
-   
+   /** 
+   * Here we can get access to GT if we want and they can affect things if we also want to.
+   */
+   // Gather tags from source and target
+   const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
+   const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
+
+   /** 
+   * Now, in order to capture an attribute and get that attribute's magnitude value, we have to create an FAggregatorEvaluateParameters.
+   * These are parameters that we have to pass in to a specific function in order to capture the attribute (in our case, VigorDef).
+   * We get that captured value with the function GetCapturedAttributeMagnitude().
+   * 
+   * This function takes 4 args: 
+   *  @the captured attribute we've set in the contructor (VigorDef);
+   *  @GE Spec which is passed to this function we're in;
+   *  @the evaluation parameters
+   *  @a float magnitude which is gonna be filled with the value of the vigor attribute on the target! So we'll create a float and pass it in.
+   * 
+   * Then, we'll clamp that attribute's value and a trick is to use Max<>() function from FMath to guarantee the value won't go below zero.
+   */
+   FAggregatorEvaluateParameters EvaluationParameters;
+   EvaluationParameters.SourceTags = SourceTags;
+   EvaluationParameters.TargetTags = TargetTags;
+
+   float Vigor = 0.f;
+   GetCapturedAttributeMagnitude(VigorDef, Spec, EvaluationParameters, Vigor);
+   Vigor = FMath::Max<float>(Vigor, 0.f);
+
 }
