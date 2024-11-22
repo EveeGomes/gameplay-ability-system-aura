@@ -8,8 +8,6 @@
 /** Interface */
 #include "Interaction/CombatInterface.h"
 
-
-
 UMMC_MaxHealth::UMMC_MaxHealth()
 {
    /** 

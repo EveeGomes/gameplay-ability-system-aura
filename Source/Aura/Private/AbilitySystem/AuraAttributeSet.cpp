@@ -24,8 +24,8 @@ UAuraAttributeSet::UAuraAttributeSet()
    *  in InitializeDefaultAttributes() after the call using primary and secondary GEs. Then, we call that method passing this new variable.
    */
    // Initialize Attributes
-   InitHealth(10.f);
-   InitMana(10.f);
+   //InitHealth(10.f);
+   //InitMana(10.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
