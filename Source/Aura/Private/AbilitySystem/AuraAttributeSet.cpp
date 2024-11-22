@@ -13,9 +13,19 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+   /** 
+   * MaxHealth and MaxMana are depended on other attributes, and since we need those values to set Health and Mana we won't initialize these values
+   *  here like we used to using the function from their ATTRIBUTE_ACCESSORS macros (InitHealth(10.f); InitMana(10.f);). We actually have to initialize
+   *  them only after MaxHealth and MaxMana have been set! Therefore timing is important here.
+   * The preferred way of setting attribute values is by GEs (the instructor's preferred way hehe). So we'll have a GE that initializes Health and Mana
+   *  to the values of MaxHealth and MaxMana. This can be an instant GE, instead of infinite, since it just initializes those values.
+   * We need a GE to initialize our vital attributes, and that should be a variable which we set where we have other variables for the GEs that 
+   *  initialize our attributes: in AuraCharacterBase. As soon as we have the variable, we'll apply that attribute by calling the method ApplyEffectToSelf
+   *  in InitializeDefaultAttributes() after the call using primary and secondary GEs. Then, we call that method passing this new variable.
+   */
    // Initialize Attributes
-   InitHealth(10.f);
-   InitMana(10.f);
+   //InitHealth(10.f);
+   //InitMana(10.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

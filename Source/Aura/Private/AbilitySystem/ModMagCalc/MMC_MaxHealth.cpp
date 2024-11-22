@@ -1,12 +1,14 @@
 // Copyright Eveline Gomes.
 
+#include "AbilitySystem/ModMagCalc/MMC_MaxHealth.h"
+
 /** To capture attributes */
 #include "AbilitySystem/AuraAttributeSet.h"
 
 /** Interface */
 #include "Interaction/CombatInterface.h"
 
-#include "AbilitySystem/ModMagCalc/MMC_MaxHealth.h"
+
 
 UMMC_MaxHealth::UMMC_MaxHealth()
 {

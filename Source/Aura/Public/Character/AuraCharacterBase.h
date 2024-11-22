@@ -65,13 +65,16 @@ protected:
 	virtual void InitAbilityActorInfo();
 
 	/** 
-	* Gameplay Effect classes and functions to initialize Primary and Secondary Attributes from AuraAttributeSet
+	* Gameplay Effect classes and functions to initialize Primary, Secondary, and Vital Attributes from AuraAttributeSet
 	*/
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	void InitializeDefaultAttributes() const;
