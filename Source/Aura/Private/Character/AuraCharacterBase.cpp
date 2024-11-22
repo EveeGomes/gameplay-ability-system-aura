@@ -60,10 +60,14 @@ void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 	check(GameplayEffectClass);
 
 	// Make a ContextHandle to be used when creating a GameplayEffectSpec
-	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	// Set the source object ('this' represents the charcter object that can be Aura or the in the case of the Enemy, the source object is the
+	//  class that has the implemented interface function GetPlayerLevel from our CombaitInterface)
+	ContextHandle.AddSourceObject(this);
 	// Create a GameplayEffectSpec
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+
 }
 
 void AAuraCharacterBase::InitializeDefaultAttributes() const
