@@ -104,7 +104,7 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
    // Get our effect context
    Props.EffectContextHandle = Data.EffectSpec.GetContext();
    // Get the ASC from the source of this GE
-   Props.SourceASC = Props.EffectContextHandle.GetInstigatorAbilitySystemComponent();
+   Props.SourceASC = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
 
    // Since we're doing a lot of accessing pointers, we need to add some checks because not all sources might have ASC or AvatarActor.
    // TSharedPtr is a struct that has its own utilities, so we can use . operator to call those utilities. Then, once checked if that
@@ -119,7 +119,7 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
       //  Pawn->GetController() returns a AController and for now we don't need a PlayerController so we can avoid another cast. That could change
       //  later if needed.
       Props.SourceController = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
-      // Now, in case the AbilityActorInfo has a nullptr for the PlayerController, we can fallback on getting the player controller from
+      // Now, in case the AbilityActorInfo has a nullptr for the PlayerController, we can fall back on getting the player controller from
       //  the actor itself by casting it to a pawn. The source might not be a pawn, so we're only setting if we can.
       if (Props.SourceController == nullptr && Props.SourceAvatarActor != nullptr)
       {
@@ -175,6 +175,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
    }
 }
 
+#pragma region OnRep_<Attribute>Methods
 void UAuraAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
 {
    GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Strength, OldStrength);
@@ -188,7 +189,6 @@ void UAuraAttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldInte
 void UAuraAttributeSet::OnRep_Resilience(const FGameplayAttributeData& OldResilience) const
 {
    GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resilience, OldResilience);
-   
 }
 
 void UAuraAttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
@@ -256,5 +256,4 @@ void UAuraAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 {
    GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Mana, OldMana);
 }
-
-
+#pragma endregion

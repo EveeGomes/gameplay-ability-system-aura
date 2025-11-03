@@ -1,6 +1,9 @@
 // Copyright Eveline Gomes.
 
 #pragma once
+/*
+ * Class responsible for retrieving data and broadcasting them to the widgets (overlay widgets).
+ */
 
 #include "Engine/DataTable.h"
 #include "GameplayTagContainer.h"
@@ -49,11 +52,11 @@ struct FUIWidgetRow : public FTableRowBase
 * Once the types are created and the variables, they can be used in BP. If a WBP has access to the widget controller, they can assign an event
 *  to receive that health if we broadcasted it.
 * So, to broadcast values, we take the delegate and call .Broadcast()
+*
+* Below we're just declaring the type, we'll need some member variables of these types so then we can assign in BP.
 */
-// These can send a single parameter. It can broadcast a float.
-// Below we're just declaring the type, we'll need some member variables of these types so then we can assign in BP.
 /** Delegates types */
-// Delegate type for broadcasting any kind of attributes values
+// Delegate type for broadcasting any kind of attributes values (These can send a single parameter. It can broadcast a float.)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 
 // Delegate to send out messages from a DT
@@ -61,7 +64,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidge
 
 
 /**
- * We'll make this a BluprintType and Blueprintable.
+ * We'll make this a BlueprintType and Blueprintable.
  * BlueprintType means we can use it as a type in Event Graph (for example if we need to cast to it).
  * Blueprintable means we can make a blueprint based on this class.
  */

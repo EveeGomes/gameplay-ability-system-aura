@@ -28,27 +28,24 @@ struct FEffectProperties
 
 	// SOURCE variables
 	UPROPERTY()
-	UAbilitySystemComponent* SourceASC = nullptr;
+	UAbilitySystemComponent* SourceASC {nullptr};
 	UPROPERTY()
-	AActor* SourceAvatarActor = nullptr;
+	AActor* SourceAvatarActor {nullptr};
 	UPROPERTY()
-	AController* SourceController = nullptr;
+	AController* SourceController {nullptr};
 	UPROPERTY()
-	ACharacter* SourceCharacter = nullptr;
+	ACharacter* SourceCharacter {nullptr};
 
 	// TARGET
 	UPROPERTY()
-	UAbilitySystemComponent* TargetASC = nullptr;
+	UAbilitySystemComponent* TargetASC {nullptr};
 	UPROPERTY()
-	AActor* TargetAvatarActor = nullptr;
+	AActor* TargetAvatarActor {nullptr};
 	UPROPERTY()
-	AController* TargetController = nullptr;
+	AController* TargetController {nullptr};
 	UPROPERTY()
-	ACharacter* TargetCharacter = nullptr;
-
-
+	ACharacter* TargetCharacter {nullptr};
 };
-
 
 /**
  * 
@@ -68,10 +65,10 @@ public:
 	*  To use that, we'll use instead, of Replicated specifier in UPROPERTY, ReplicatedUsing = name_of_rep_notify. This name is conventionally created
 	*  as OnRep_attribute_name, which is a function we'll create associated to that attribute.
 	* That function has to be a UFUNCTION in order to be OnRep. It might have no arg or 1 arg of the same type as the attribute, ie of type
-	*  FGameAttributeData. When the variable is replicated (it'll hold its new replicated value), OnRep is called and if it has the arg, ít'll hold the 
+	*  FGameAttributeData. When the variable is replicated (it'll hold its new replicated value), OnRep is called and if it has the arg, it'll hold the 
 	*  "old" value of that attribute, so it can be useful for example to compare the old and current values.
 	* 
-	* Once we set an OnRep notify to a replicated attribute, we must inform the Ability System of that change so it can bookkeep the changes and make
+	* Once we set an OnRep notify to a replicated attribute, we must inform the Ability System of that change so it can book keep the changes and make
 	*  sure the whole AS is working cohesively.
 	* 
 	* There's another step that must be done in order to register a variable for replication: override a function where we register variables for
@@ -86,13 +83,15 @@ public:
 	*/
 	
 	/** Begin UObject */
+	//
 	// Register variables for replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	//
 	/** End UObject */
 
 	/** Begin UAttributeSet */
 	// Called right before an attribute changes (changes to CurrentValue), either from a GE or changed directly through attribute accessors.
-	//  This function is used to do Campling, not to call other functionality. However, it doesn't permanently change the modifier, just the value
+	//  This function is used to do Clamping, not to call other functionality. However, it doesn't permanently change the modifier, just the value
 	//  returned from querying the modifier. Later operations recalculate the current value from all modifiers, so we'll need to clamp again.
 	// https://github.com/tranek/GASDocumentation/blob/master/README.md#445-preattributechange
 	// Removed clamping: https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg/learn/lecture/39784058#questions/20594972
@@ -105,6 +104,7 @@ public:
 	*  https://github.com/tranek/GASDocumentation/blob/master/README.md#446-postgameplayeffectexecute
 	*/
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	//
 	/** End UAttributeSet */
 
 	/**
@@ -126,7 +126,7 @@ public:
 	*/
 	/** 
 	* To initialize these attributes using a data table, we need to expose the ASC to BP so we can set a specific asset, a data table, on that component.
-	* So, in AuraPlaterState, where our ASC variable is, we'll add VisibleAnywhere specifier to its UPROPERTY!
+	* So, in AuraPlayerState, where our ASC variable is, we'll add VisibleAnywhere specifier to its UPROPERTY!
 	* 
 	* The other way (and preferable way) is to initialize the attributes using a gameplay effect (GE). We'll do that through a function that'll
 	*  apply this GE.
@@ -209,6 +209,7 @@ public:
 	/** 
 	* Vital Attributes 
 	*/
+	//
 	// HEALTH
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
@@ -222,6 +223,7 @@ public:
 	/** 
 	* OnRep functions - used to inform the ability system that the attribute has just been replicated
 	*/
+	//
 	// Primary Attributes
 	UFUNCTION()
 	void OnRep_Strength(const FGameplayAttributeData& OldStrength) const;

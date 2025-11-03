@@ -33,7 +33,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	/** Begin AuraCharacterBase */
-	void InitAbilityActorInfo() override;
+	virtual void InitAbilityActorInfo() override;
 	/** End AuraCharacterBase */
 
 	/** 

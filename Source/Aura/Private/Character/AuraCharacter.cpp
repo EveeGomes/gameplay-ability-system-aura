@@ -72,8 +72,8 @@ void AAuraCharacter::InitAbilityActorInfo()
 
    /** 
    * Here we know that the player controller has been set already. We also have here the player state, ASC and AS been set. Therefore this is
-   *  a great place to call InitOverlay() so it construct the widget and set the widget controller. For that we'll need access to AuraHUD! HUD is
-   *  always accessable through the player controller, so we can use AuraPlayerController through a ptr.
+   *  a great place to call InitOverlay() so it construct the widget and set the widget controller. For that we'll need access to AuraHUD! The HUD is
+   *  always accessible through the player controller, so we can use AuraPlayerController through a ptr.
    * A common question: should we check if AuraPlayerController ptr is null? Or do we know it'll never be null at this point? Should we use an if
    *  statement or an assertion?
    *  So only on the server, all the player controllers are valid, ie the server has all the players's player controllers. Each player however, has

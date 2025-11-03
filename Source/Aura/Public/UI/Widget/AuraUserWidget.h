@@ -7,9 +7,10 @@
 #include "AuraUserWidget.generated.h"
 
 /**
- * A single purpose component that can be attached to locations on the hud and the viewport. It's normally a single "UI thing" or a logical grouping
- *  of "UI things".
+ * A single purpose component that can be attached to locations on the hud and the viewport.
+ * It's normally a single "UI thing" or a logical grouping of "UI things".
  *  (https://jollymonsterstudio.com/2019/03/12/unreal-engine-c-fundamentals-ahud-uuserwidget-and-uwidgetanimation/)
+ *  
  * This is our Base class for widgets.
  */
 UCLASS()
@@ -34,10 +35,11 @@ class AURA_API UAuraUserWidget : public UUserWidget
 	*/
 
 public:
-	// Set the WidgetController and call WidgetControllerSet()
+	/** Set the WidgetController and call WidgetControllerSet() */
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetController(UObject* InWidgetController);
 
+	/** Points to the widget controller created and set in AAuraHUD::GetOverlayWidgetController. */
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UObject> WidgetController;
 

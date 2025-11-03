@@ -155,7 +155,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
             FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
             if (Tag.MatchesTag(MessageTag))
             {
-               /* Perform a look up to find the row in the DT that correspond to the tag */
+               /* Perform a look-up to find the row in the DT that correspond to the tag */
                const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
                /* Broadcast the row */
                MessageWidgetRowDelegate.Broadcast(*Row);
