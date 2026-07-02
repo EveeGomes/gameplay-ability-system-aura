@@ -21,4 +21,10 @@ class AURA_API UAuraAssetManager : public UAssetManager
 public:
 	/** Casts the engine's asset manager to this type and returns it. */
 	static UAuraAssetManager& Get();
+
+protected:
+	/** Called early on to initialize the assets for the game. Then this is the perfect place to initialize the
+	 *   native GTs created in AuraGameplayTags.
+	 */
+	virtual void StartInitialLoading() override;
 };

@@ -2,6 +2,7 @@
 
 
 #include "AuraAssetManager.h"
+#include "AuraGameplayTags.h"
 
 UAuraAssetManager& UAuraAssetManager::Get()
 {
@@ -16,4 +17,11 @@ UAuraAssetManager& UAuraAssetManager::Get()
 	UAuraAssetManager* AuraAssetManager = Cast<UAuraAssetManager>(GEngine->AssetManager);
 	// Dereference the pointer since this method expects to return a reference to UAuraAssetManager.
 	return *AuraAssetManager;
+}
+
+void UAuraAssetManager::StartInitialLoading()
+{
+	Super::StartInitialLoading();
+
+	FAuraGameplayTags::InitializeNativeGameplayTags();
 }
