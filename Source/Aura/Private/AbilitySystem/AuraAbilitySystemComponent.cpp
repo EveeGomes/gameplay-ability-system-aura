@@ -10,19 +10,6 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 	// Bind to a delegate. We use AddObject() because it's not a dynamic delegate (we can see by checking its declaration)
 	// Now EffectApplied is a callback that'll be called in response to any effect that gets applied to this ASC.
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
-
-	/**
-	 * For testing the native GTs.
-	 * When playing the game, it shows the printing string 4 times. That's because there are 4 ASC and this function is called
-	 *  by all 4 of them (3 enemies and 1 player character!). However, the GT is created only once, only the printing
-	 *  that's happening 4 times.
-	 */
-	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
-	GEngine->AddOnScreenDebugMessage(
-		-1,
-		10.f,
-		FColor::Orange,
-		FString::Printf(TEXT("Tag: %s"), *GameplayTags.Attributes_Secondary_Armor.ToString()));
 }
 
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
