@@ -20,10 +20,15 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	 *	It has to be as soon as we can before any of those tags are attempted to be used!
 	 *  To achieve that, we'll create yet another singleton, our version of an asset manager that'll have to do with loading
 	 *	primary assets, and it's where we can initialize this GTs.
-	 *	
+	 *
+	 *	After creating a FGameplayTag variable we need to associate the Tag we're creating here with that variable.
+	 *	 We store the GT returned by AddNativeGameplayTag in their corresponding variable. However, we need to use the
+	 *	 GameplayTags only object of this class since the current function we're in is static. So, we need to store the
+	 *	 GT into this object's variables: GameplayTags.Variable = GT returned by AddNativeGameplayTag.
+	 *	 Now, with those GTs stored in their respective variables, they can be accessed by other classes!
 	 */
 
-	UGameplayTagsManager::Get().AddNativeGameplayTag(
+	GameplayTags.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.Armor"),
 		FString("Reduces damage taken, improves Block Chance.")
 		);

@@ -27,6 +27,8 @@ public:
 
    /** Initialize (create) the GTs. */
    static void InitializeNativeGameplayTags();
+
+   FGameplayTag Attributes_Secondary_Armor;
    
 protected:
    
