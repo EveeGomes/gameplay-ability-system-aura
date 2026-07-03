@@ -27,8 +27,20 @@ public:
 
    /** Initialize (create) the GTs. */
    static void InitializeNativeGameplayTags();
-
+   
+   /** Gameplay Tags Variables */
+   ///////////////////////// Secondary Attributes /////////////////////////
    FGameplayTag Attributes_Secondary_Armor;
+   FGameplayTag Attributes_Secondary_Armor_Penetration;
+   FGameplayTag Attributes_Secondary_Block_Chance;
+   FGameplayTag Attributes_Secondary_Critical_Hit_Chance;
+   FGameplayTag Attributes_Secondary_Critical_Hit_Damage;
+   FGameplayTag Attributes_Secondary_Critical_Hit_Resistance;
+   FGameplayTag Attributes_Secondary_Health_Regeneration;
+   FGameplayTag Attributes_Secondary_Mana_Regeneration;
+   FGameplayTag Attributes_Secondary_Max_Health;
+   FGameplayTag Attributes_Secondary_Max_Mana;
+   ///////////////////////// Secondary Attributes /////////////////////////
    
 protected:
    
