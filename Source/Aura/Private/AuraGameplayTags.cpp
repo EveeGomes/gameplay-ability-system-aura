@@ -8,23 +8,13 @@
 
 /**
  * @param GTVariable The gameplay tag variable name
+ * @param AttributeOrder If it's either primary or secondary attribute
  * @param GTName The last part of the gameplay tag after Attributes.Secondary separated by a dot(.) -> Attribute.Name
  * @param Description Any comment to help as a tooltip for that attribute
  */
-#define ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(GTVariable, GTName, Description) \
+#define ASSIGN_AND_ADD_ATTRIBUTES_GTS(GTVariable, AttributeOrder, GTName, Description) \
 	GameplayTags.GTVariable = UGameplayTagsManager::Get().AddNativeGameplayTag( \
-		FName("Attributes.Secondary." #GTName), \
-		FString(Description) \
-	);
-
-/**
- * @param GTVariable The gameplay tag variable name
- * @param GTName The last part of the gameplay tag after Attributes.Primary separated by a dot(.) -> Attribute.Name
- * @param Description Any comment to help as a tooltip for that attribute
- */
-#define ASSIGN_AND_ADD_ATTRIBUTES_PRIMARY_GTS(GTVariable, GTName, Description) \
-	GameplayTags.GTVariable = UGameplayTagsManager::Get().AddNativeGameplayTag( \
-		FName("Attributes.Primary." #GTName), \
+		FName("Attributes" "." #AttributeOrder "." #GTName), \
 		FString(Description) \
 	);
 
@@ -50,33 +40,33 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	 *	 Now, with those GTs stored in their respective variables, they can be accessed by other classes!
 	 */
 
-	ASSIGN_AND_ADD_ATTRIBUTES_PRIMARY_GTS(Attributes_Primary_Strength,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Strength, Primary,
 		Strength, "Increases physical damage");
-	ASSIGN_AND_ADD_ATTRIBUTES_PRIMARY_GTS(Attributes_Primary_Intelligence,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Intelligence, Primary,
 		Intelligence, "Increases magical damage");
-	ASSIGN_AND_ADD_ATTRIBUTES_PRIMARY_GTS(Attributes_Primary_Resilience,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Resilience, Primary,
 		Resilience, "Increases Armor and Armor Penetration");
-	ASSIGN_AND_ADD_ATTRIBUTES_PRIMARY_GTS(Attributes_Primary_Vigor,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Vigor, Primary,
 		Vigor, "Increases Health");
 
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_Armor,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_Armor, Secondary,
 		Armor, "Reduces damage taken, improves Block Chance");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_ArmorPenetration,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_ArmorPenetration, Secondary,
 		ArmorPenetration, "Ignored Percentage of enemy Armor, increases Critical Hit Chance");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_BlockChance,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_BlockChance, Secondary,
 		BlockChance, "Chance to cut incoming damage in half");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_CriticalHitChance,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_CriticalHitChance, Secondary,
 		CriticalHitChance, "Chance to double damage plus critical hit bonus");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_CriticalHitDamage,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_CriticalHitDamage, Secondary,
 		CriticalHitDamage, "Bonus damage when a critical hit is scored");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_CriticalHitResistance,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_CriticalHitResistance, Secondary,
 		CriticalHitResistance, "Reduces Critical Hit Chance of attacking enemies");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_HealthRegeneration,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_HealthRegeneration, Secondary,
 		HealthRegeneration, "Amount of Health regenerated every 1 second");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_ManaRegeneration,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_ManaRegeneration, Secondary,
 		ManaRegeneration, "Amount of Mana regenerated every 1 second");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_MaxHealth,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_MaxHealth, Secondary,
 		MaxHealth, "Maximum amount of Health obtainable");
-	ASSIGN_AND_ADD_ATTRIBUTES_SECONDARY_GTS(Attributes_Secondary_MaxMana,
+	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_MaxMana, Secondary,
 		MaxMana, "Maximum amount of Mana obtainable");
 }
