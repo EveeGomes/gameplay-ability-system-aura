@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "AuraHUD.generated.h"
 
+class UAttributesMenuWidgetController;
 /** Forward Declaration */
 class UAuraUserWidget;
 class UOverlayWidgetController;
@@ -38,6 +39,7 @@ public:
 	*  exist).
 	*/
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
+	UAttributesMenuWidgetController* GetAttributesMenuWidgetController(const FWidgetControllerParams& WCParams);
 
 	// Construct the widget, the widget controller, set the widget's widget controller and add it to the viewport
 	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
@@ -57,4 +59,12 @@ private:
 	// To create the overlay widget controller, we need a UClass of type UOverlayWidgetController
 	UPROPERTY(EditAnywhere) // since we need to set it from BP
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
+
+	/**
+	 * Variables used to construct and store an Attribute Menu Widget Controller.
+	 */
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAttributesMenuWidgetController> AttributesMenuWidgetControllerClass;
+	UPROPERTY()
+	TObjectPtr<UAttributesMenuWidgetController> AttributesMenuWidgetController;
 };
