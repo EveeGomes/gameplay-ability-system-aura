@@ -5,10 +5,10 @@
 
 void UAttributesMenuWidgetController::BroadcastInitialValues()
 {
-	Super::BroadcastInitialValues();
+
 }
 
 void UAttributesMenuWidgetController::BindCallbacksToDependencies()
 {
-	Super::BindCallbacksToDependencies();
+
 }
