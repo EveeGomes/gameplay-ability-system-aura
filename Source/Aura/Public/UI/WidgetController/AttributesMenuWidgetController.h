@@ -15,7 +15,7 @@
  *  controllers set (ie it needs that the overlay widget had been already constructed).
  * Retrieve information from Attributes and send over to the Attributes Menu to be displayed. 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class AURA_API UAttributesMenuWidgetController : public UAuraWidgetController
 {
 	GENERATED_BODY()
