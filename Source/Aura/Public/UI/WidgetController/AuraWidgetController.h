@@ -74,7 +74,9 @@ public:
 	* So, the widget controller should have a way of broadcasting initial values, like initial health and mana values.
 	* We'll have a virtual function for broadcasting initial values so that any widget controller child of this class that inherits this function 
 	*  can broadcast its own unique initial values.
+	* Make it BlueprintCallable so its children can call it in BP (like WBP_AttributeMenuWidgetController)
 	*/
+	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
 
 	virtual void BindCallbacksToDependencies();
