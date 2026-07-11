@@ -4,7 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "UI/WidgetController/AuraWidgetController.h"
+#include "AbilitySystem/Data/AttributeInfo.h"
 #include "AttributesMenuWidgetController.generated.h"
+
+struct FAuraAttributeInfo;
+/**
+ * To broadcast information we need a delegate. This will broadcast information from an attribute using the struct that
+ *  holds all information the AttributeMenu widget needs.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature, const FAuraAttributeInfo&, AttributeInfo);
 
 /**
  * Used by the Attribute Menu, meaning it needs its widget controller set (this widget controller!) - or make this set itself.
@@ -21,7 +29,23 @@ class AURA_API UAttributesMenuWidgetController : public UAuraWidgetController
 	GENERATED_BODY()
 
 public:
+	/**
+	 * It'll broadcast Attributes initial values so the AttributesManu widget can display.
+	 * So, to broadcast info to the AttributesManu widget, we can use the struct that we made and holds all info to be
+	 *  displayed.
+	 */
 	virtual void BroadcastInitialValues() override;
-	virtual void BindCallbacksToDependencies() override;
+
 	
+	virtual void BindCallbacksToDependencies() override;
+
+	// Broadcast AttributeInfo
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
+	FAttributeInfoSignature AttributeInfoDelegate;
+protected:
+	/**
+	 * Set in BP, and used to look up the AttributeInfo based on the gameplay tag!
+	 */
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAttributeInfo> AttributeInfo;
 };
