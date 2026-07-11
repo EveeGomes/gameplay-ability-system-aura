@@ -6,6 +6,8 @@ Build
 #Content
 Assets
 
+*.umap
+
 .vscode
 .vs
 *.VC.db
