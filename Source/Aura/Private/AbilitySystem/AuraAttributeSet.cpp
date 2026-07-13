@@ -10,6 +10,7 @@
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -26,6 +27,23 @@ UAuraAttributeSet::UAuraAttributeSet()
    // Initialize Attributes
    //InitHealth(10.f);
    //InitMana(10.f);
+
+   /**
+    * Add a key-value pair to map GT to each of our attributes.
+    * For each attribute:
+    *    1. Create a delegate
+    *    2. Bind the attribute static function Getter from ATTRIBUTE_ACCESSORS
+    *    3. Add the key-valeu pair to the map as (GT, Attribute delegate)
+    */
+   const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
+
+   FAttributeSignature StrengthDelegate;
+   StrengthDelegate.BindStatic(GetStrengthAttribute);
+   TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, StrengthDelegate);
+
+   FAttributeSignature IntelligenceDelegate;
+   IntelligenceDelegate.BindStatic(GetIntelligenceAttribute);
+   TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence, IntelligenceDelegate);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
