@@ -122,7 +122,7 @@ public:
 	*/
 	
 	/** GameplayTag mapped to a function pointer instead of a delegate per attribute */
-	TMap<FGameplayTag, TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr> TagsToAttributes;
+	TMap<FGameplayTag, FGameplayAttribute(*)()> TagsToAttributes;
 	
 	/**
 	* Primary Attributes
