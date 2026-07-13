@@ -7,6 +7,7 @@
 #include "AbilitySystem/Data/AttributeInfo.h"
 #include "AttributesMenuWidgetController.generated.h"
 
+struct FGameplayAttribute;
 struct FAuraAttributeInfo;
 /**
  * To broadcast information we need a delegate. This will broadcast information from an attribute using the struct that
