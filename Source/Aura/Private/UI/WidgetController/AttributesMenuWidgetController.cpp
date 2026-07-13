@@ -82,5 +82,27 @@ void UAttributesMenuWidgetController::BroadcastInitialValues()
 
 void UAttributesMenuWidgetController::BindCallbacksToDependencies()
 {
+	/**
+	 * In order to broadcast the values of attributes when they change, we need to bind functions (or lambdas) to attributes
+	 *  delegates that broadcast new value whenever their values change! That comes from the ASC and it's similar to what is
+	 *  done in other WidgetController (like the Overlay one).
+	 * When capturing some values in the lambda, sometimes it is better to capture by value. For example the Pair variable:
+	 *  by the time am attribute changes and the delegate gets broadcast the Pair variable which is local to the for loop
+	 *  will have long since gone out of scope. So, we just wanna capture by value to have a copy stored within the lambda.
+	 */
 
+	UAuraAttributeSet* AS = Cast<UAuraAttributeSet>(AttributeSet);
+	
+	for (auto& Pair : AS->TagsToAttributes)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
+			[this, Pair, AS](const FOnAttributeChangeData& Data)
+			{
+				FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
+				FGameplayAttribute Attr = Pair.Value();
+				Info.AttributeValue = Attr.GetNumericValue(AS);
+				AttributeInfoDelegate.Broadcast(Info);
+			}
+		);
+	}
 }
