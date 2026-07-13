@@ -22,10 +22,18 @@ void UAttributesMenuWidgetController::BroadcastInitialValues()
 
 	check(AttributeInfo);
 
-	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Strength);
-	Info.AttributeValue = AS->GetStrength();
+	/**
+	 * The following strategy works, but we'd have to type the same code for each and every attribute, the existing ones
+	 *  and future ones we might want to create.
+	 */
+	FAuraAttributeInfo StrengthInfo = AttributeInfo->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Strength);
+	StrengthInfo.AttributeValue = AS->GetStrength();
+	AttributeInfoDelegate.Broadcast(StrengthInfo);
 
-	AttributeInfoDelegate.Broadcast(Info);
+	FAuraAttributeInfo IntelligenceInfo = AttributeInfo->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Intelligence);
+	IntelligenceInfo.AttributeValue = AS->GetStrength();
+	AttributeInfoDelegate.Broadcast(IntelligenceInfo);
+	
 }
 
 void UAttributesMenuWidgetController::BindCallbacksToDependencies()
