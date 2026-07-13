@@ -31,7 +31,7 @@ void UAttributesMenuWidgetController::BroadcastInitialValues()
 	AttributeInfoDelegate.Broadcast(StrengthInfo);
 
 	FAuraAttributeInfo IntelligenceInfo = AttributeInfo->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Intelligence);
-	IntelligenceInfo.AttributeValue = AS->GetStrength();
+	IntelligenceInfo.AttributeValue = AS->GetIntelligence();
 	AttributeInfoDelegate.Broadcast(IntelligenceInfo);
 	
 }
