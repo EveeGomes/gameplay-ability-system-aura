@@ -17,9 +17,6 @@
  GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
  GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-/** Delegate that bind a function that returns an FGameplayAttribute, such as the getter function from ATTRIBUTE_ACCESSORS */
-DECLARE_DELEGATE_RetVal(FGameplayAttribute, FAttributeSignature);
-
 USTRUCT()
 struct FEffectProperties
 {
@@ -123,9 +120,9 @@ public:
 	*  InitHealth(100.f);
 	* To verify the values have been set, we can open the editor, click on the viewport, ~, and write showdebug abilitysystem.
 	*/
-
-	/** GameplayTag mapped to a delegate that returns a getter function to the corresponding attribute */
-	TMap<FGameplayTag, FAttributeSignature> TagsToAttributes;
+	
+	/** GameplayTag mapped to a function pointer instead of a delegate per attribute */
+	TMap<FGameplayTag, TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr> TagsToAttributes;
 	
 	/**
 	* Primary Attributes

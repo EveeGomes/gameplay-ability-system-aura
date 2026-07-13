@@ -45,12 +45,36 @@ void UAttributesMenuWidgetController::BroadcastInitialValues()
 	 *  bound to the delegate can have the value and display to the player!! :)
 	 *  **When getting the Value from the map, since it's a delegate, we should Execute so get the FGameplayAttribute.
 	 *   Then from it, we can get the attribute value by calling GetNumericValue passing our AttributeSet.
+	 *
+	 *  However, there's a much better way of doing it. Now we still need a lot of boilerplate code in our AttributeSet.
+	 *   That's because we're using a delegate. But looking at the Bind function we use, BindStatic, it accepts a function.
+	 *   And checking the signature of BindStatic we see that it accepts a type, TBaseStaticDelegateInstance. In the description
+	 *   of BindStatic, it says "Binds a raw C++ pointer global function delegate". These delegates are just types that can
+	 *   store function pointers. The idea here is to use that type, accepted by BindStatic, in the map! Ie we should
+	 *   map a GT to a TBaseStaticDelegateInstance.
+	 *   To do that we'll create an instance of TBaseStaticDelegateInstance. That's a templated type which we pass some
+	 *   "parameters" to the template <> brackets. It asks for the function we want, by asking for the return type and params.
+	 *   In out case we're intereted in Get##AttributeName##Attribute() which is one of ATTRIBUTE_ACCESSORS that returns an
+	 *   FGameplayAttribute and receives no input. So we'd have something like: for the 1st arg it would be the type of
+	 *   function signature we want. Then we pass a default arg for delegate usage.
+	 *   TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>.
+	 *   What we really want is a function pointer, and that we can find in the instance of TBaseStaticDelegateInstance we're
+	 *   creating. In the template class definition we see it has a public FFuncPtr, which assembles the template inputs into
+	 *   a function pointer with the correct signature:
+	 *   TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FunctionPointer;
+	 *   In essence, a function pointer can hold a function with the signature specified! Eg:
+	 *		FunctionPointer = GetIntelligenceAttribute; // no need to use the (), here we're passing only the function address!
+	 *		FunctionPointer(); // this will CALL the function, which in this case is the getter function and will return a value
+	 *		FGameplayAttribute Attribute = FunctionPointer();
+	 *	>> Now, since we need to specify the TYPE of a TBaseStaticDelegateInstance to map the GT in the GT to Attribute map,
+	 *	 the map declaration will be:
+	 *	 TMap<TGameplayTag, TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr> TagsToAttributes;
 	 */
 
 	for (auto& Pair : AS->TagsToAttributes)
 	{
 		FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-		FGameplayAttribute Attr = Pair.Value.Execute();
+		FGameplayAttribute Attr = Pair.Value();
 		Info.AttributeValue = Attr.GetNumericValue(AS);
 		AttributeInfoDelegate.Broadcast(Info);
 	}
