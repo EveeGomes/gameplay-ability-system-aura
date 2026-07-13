@@ -47,8 +47,9 @@ struct FEffectProperties
 	ACharacter* TargetCharacter {nullptr};
 };
 
-/** Create an alias for this giant type so it's more elegant to see on the map declaration! */
-typedef TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+/** Have a template alias in order to have the function pointer of any type needed */
+template<class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
 
 /**
  * 
@@ -125,7 +126,7 @@ public:
 	*/
 	
 	/** GameplayTag mapped to a function pointer instead of a delegate per attribute */
-	TMap<FGameplayTag, FAttributeFuncPtr> TagsToAttributes;
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
 	
 	/**
 	* Primary Attributes
