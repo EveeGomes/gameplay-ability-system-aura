@@ -30,23 +30,18 @@ class AURA_API UAttributesMenuWidgetController : public UAuraWidgetController
 	GENERATED_BODY()
 
 public:
-	/**
-	 * It'll broadcast Attributes initial values so the AttributesManu widget can display.
-	 * So, to broadcast info to the AttributesManu widget, we can use the struct that we made and holds all info to be
-	 *  displayed.
-	 */
+	/* Broadcast Attributes initial values so the AttributesManu widget can display. */
 	virtual void BroadcastInitialValues() override;
 
-	
+	/* Binds a lambda to an ASC delegate that broadcasts when an attribute value changes. */
 	virtual void BindCallbacksToDependencies() override;
 
 	// Broadcast AttributeInfo
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
+	
 protected:
-	/**
-	 * Set in BP, and used to look up the AttributeInfo based on the gameplay tag!
-	 */
+	/* Set in BP, and used to look up the AttributeInfo based on the gameplay tag! */
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;
 
