@@ -8,10 +8,7 @@
 
 /**
  * Singleton used for loading primary assets.
- *
  * This is also where AuraGameplayTags singleton can initialize tags by calling its method, FAuraGameplayTags::InitializeNativeGameplayTags().
- *
- * 
  */
 UCLASS()
 class AURA_API UAuraAssetManager : public UAssetManager
