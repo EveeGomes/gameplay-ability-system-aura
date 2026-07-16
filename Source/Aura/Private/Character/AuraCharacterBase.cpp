@@ -2,6 +2,7 @@
 #include "Character/AuraCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -75,4 +76,20 @@ void AAuraCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+	/**
+	 * Check if we have authority to grant abilities before doing so.
+	 * Granting abilities should be something that the ASC is able to do. So, we'll go to our ASC and make a public
+	 *  function that will grant those abilities, and call it here.
+	 * Then, we need to call this function somewhere:
+	 *  For Aura, a good place to call is in PossessedBy().
+	 */
+
+	if (!HasAuthority()) return;
+
+	UAuraAbilitySystemComponent* AuraASC = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	AuraASC->AddCharacterAbilities(StartupAbilities);
 }
