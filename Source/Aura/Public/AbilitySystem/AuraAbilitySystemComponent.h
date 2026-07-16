@@ -43,13 +43,13 @@ public:
 	/* Broadcast asset tags from EffectApplied() */
 	FEffectAssetTags EffectAssetTags;
 
+	/* Grant StartupAbilities */
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
+
 protected:
 	/** Begin UAbilitySystemComponent */
-	//
 	// Callback to bind to the multicast delegate on UASC class of type FOnGameplayEffectAppliedDelegate
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
-	//
 	/** End UAbilitySystemComponent */
-
-
+	
 };

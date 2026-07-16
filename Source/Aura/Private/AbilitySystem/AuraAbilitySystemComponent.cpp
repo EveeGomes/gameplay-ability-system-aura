@@ -12,6 +12,21 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
 }
 
+void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	/**
+	 * To grant an ability we need to create an AbilitySpec from an ability class.
+	 *  Then, we use a function from the ASC to grant the ability, GiveAbility().
+	 *  Another way of granting is using GiveAbilityAndActivateOnce();
+	 */
+
+	for (TSubclassOf<UGameplayAbility> Ability : StartupAbilities)
+	{
+		const FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability, 1);
+		GiveAbility(AbilitySpec);
+	}
+}
+
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
                                                 const FGameplayEffectSpec& EffectSpec,
                                                 FActiveGameplayEffectHandle ActiveEffectHandle)
