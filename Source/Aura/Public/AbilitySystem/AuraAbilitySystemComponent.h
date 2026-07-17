@@ -51,5 +51,4 @@ protected:
 	// Callback to bind to the multicast delegate on UASC class of type FOnGameplayEffectAppliedDelegate
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
 	/** End UAbilitySystemComponent */
-	
 };
