@@ -40,6 +40,9 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	 *	 Now, with those GTs stored in their respective variables, they can be accessed by other classes!
 	 */
 
+	/**
+	 * Primary Attributes
+	 */
 	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Strength, Primary,
 		Strength, "Increases physical damage");
 	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Intelligence, Primary,
@@ -48,7 +51,10 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		Resilience, "Increases Armor and Armor Penetration");
 	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Primary_Vigor, Primary,
 		Vigor, "Increases Health");
-
+	
+	/**
+	 * Secondary Attributes
+	 */
 	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_Armor, Secondary,
 		Armor, "Reduces damage taken, improves Block Chance");
 	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_ArmorPenetration, Secondary,
@@ -69,4 +75,37 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		MaxHealth, "Maximum amount of Health obtainable");
 	ASSIGN_AND_ADD_ATTRIBUTES_GTS(Attributes_Secondary_MaxMana, Secondary,
 		MaxMana, "Maximum amount of Mana obtainable");
+
+	/**
+	* InputAction Tags
+	*/
+	GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.LMB"),
+		FString("Input Tag for Left Mouse Button")
+	);
+
+	GameplayTags.InputTag_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.RMB"),
+		FString("Input Tag for Right Mouse Button")
+	);
+
+	GameplayTags.InputTag_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.1"),
+		FString("Input Tag for 1 key")
+	);
+
+	GameplayTags.InputTag_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.2"),
+		FString("Input Tag for 2 key")
+	);
+
+	GameplayTags.InputTag_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.3"),
+		FString("Input Tag for 3 key")
+	);
+
+	GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.4"),
+		FString("Input Tag for 4 key")
+	);
 }
