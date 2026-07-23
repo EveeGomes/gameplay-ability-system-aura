@@ -30,9 +30,10 @@ class AURA_API UAuraInputConfig : public UDataAsset
 	GENERATED_BODY()
 	
 public:
+	/* Returns an InputAction associated with a GT, instead of an FAuraInputAction so it's more straight forward! */
+	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = false) const;
+	
 	/* Set on the Data Asset BP */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FAuraInputAction> AbilityInputActions;
-
-	
 };
