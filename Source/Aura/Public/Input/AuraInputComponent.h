@@ -41,6 +41,7 @@ public:
 	 *  So this templated function is capable of receiving function pointers, and it doesn't matter those functions signatures
 	 *   because this is a template function so it'll handle whatever passed in function.
 	 *  Once the callbacks are bound, as soon as any of the InputActions from AuraInputConfig are pressed, the callbacks will be fired off.
+	 *  Now, as long as the abilities have tags associated with them, we can use our InputActions from InputTags!!!
 	 */
 	template<class UserClass, typename PressedFuncType, typename ReleasedFuncType, typename HeldFuncType>
 	void BindAbilityActions(const UAuraInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, HeldFuncType HeldFunc);
