@@ -46,6 +46,10 @@ public:
 	/* Grant StartupAbilities */
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
 
+	/* Functions for activating abilities - called by the PlayerController */
+	void AbilityInputTagHeld(const FGameplayTag& InputTag);
+	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+
 protected:
 	/** Begin UAbilitySystemComponent */
 	// Callback to bind to the multicast delegate on UASC class of type FOnGameplayEffectAppliedDelegate

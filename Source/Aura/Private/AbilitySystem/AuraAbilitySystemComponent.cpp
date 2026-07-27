@@ -32,6 +32,10 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 	 * We need to cast to our AuraGameplayAbility class because the ability we get from the AbilitySpec is a simple
 	 *  UGameplayAbility and ours has the StartupInputTag.
 	 * Tags in DynamicAbilityTags can be added and/or removed at runtime!
+	 *
+	 * Then, we'll implement the callback functions on the PlayerController that are called by pressing any key bound to
+	 *  an IA from AuraInputConfig! Since when those IAs are fired they pass an InputTag, we're able to use the ASC will
+	 *  that will be able to know which ability has that tag (InputTag) to perform something like activate the ability!
 	 */
 
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
@@ -48,6 +52,16 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 			GiveAbility(AbilitySpec);
 		}
 	}
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
+{
+	
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
+{
+	
 }
 
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
