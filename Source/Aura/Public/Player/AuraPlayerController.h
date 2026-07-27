@@ -12,6 +12,7 @@ class UInputAction;
 struct FInputActionValue;
 class IEnemyInterface;
 class UAuraInputConfig;
+class UAuraAbilitySystemComponent;
 
 /**
  * 
@@ -69,4 +70,10 @@ private:
 	/* Set the InputConfig DA from BP */
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UAuraInputConfig> InputConfig;
+
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	/* It casts only once by checking if it's null (which will be the first time), and then casting to AuraASC. */
+	UAuraAbilitySystemComponent* GetASC();
 };
