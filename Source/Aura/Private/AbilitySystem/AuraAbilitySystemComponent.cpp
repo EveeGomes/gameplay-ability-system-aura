@@ -56,12 +56,49 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 
 void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
-	
+	/**
+	 * Check if there's any activatable abilities associated with the InputTag passed. Then, activate them if they're not
+	 *  already activated (that's to avoid activating it every single frame since this is a held function).
+	 *  There's a function we can call that returns all the activatable abilities. We need to check that because abilities
+	 *  can be blocked by tags, so this function will give us an array of abilities we can activate.
+	 *  So we loop through them and check the one that has InputTag since to activate only that one.
+	 *  Abilities have the concept of acknolidging when an input that activates it is pressed or released. We can even
+	 *  override those function to add anything we want to happen when they're called.
+	 *  We'll use AbilitySpecInputPressed to tell the ability that its input has being pressed before activating it.
+	 */
+
+	if (!InputTag.IsValid()) return;
+
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(AbilitySpec);
+			if (!AbilitySpec.IsActive())
+			{
+				TryActivateAbility(AbilitySpec.Handle);
+			}
+		}
+	}
 }
 
 void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
 {
-	
+	/**
+	 * Instead of simply end the ability if its input is release, we'll let the ability determine that because not all
+	 *  abilities need to be cancelled or ended when their input is no longer pressed.
+	 *  So here we'll tell the ability that its input is not being pressed anymore.
+	 */
+
+	if (!InputTag.IsValid()) return;
+
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputReleased(AbilitySpec);
+		}
+	}
 }
 
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
