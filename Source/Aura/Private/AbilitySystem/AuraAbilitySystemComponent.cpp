@@ -4,6 +4,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 
 #include "AuraGameplayTags.h"
+#include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -18,13 +19,34 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 	 * To grant an ability we need to create an AbilitySpec from an ability class.
 	 *  Then, we use a function from the ASC to grant the ability, GiveAbility().
 	 *  Another way of granting is using GiveAbilityAndActivateOnce();
+	 *
+	 * Here's the place where we want to check if the ability has a valid Startup input tag.
+	 * We want our GameplayAbilities to have the concept of an InputTag, that we'd like to change at runtime. Having a
+	 *  variable on AuraGameplayAbility is great for Startup input tags, but if we'd like to be able to change the tags
+	 *  we can't use variables on AuraGameplayAbility (e.g. have an ability mapped to the LMB and want to change to the RMB)!
+	 * The GameplayAbilitySpec has a specific GameplayTag container for tags that can be added or removed dinamically
+	 *  throughout the game, and that's perfect for our InputTag idea :).
+	 * Since this method adds Startup abilities for the first time at the beginning of the game, this is a good place
+	 *  to check the Startup InputTags.
+	 * And we can add those to the AbilitySpec for that given ability (AbilitySpec is the represensation of an ability).
+	 * We need to cast to our AuraGameplayAbility class because the ability we get from the AbilitySpec is a simple
+	 *  UGameplayAbility and ours has the StartupInputTag.
+	 * Tags in DynamicAbilityTags can be added and/or removed at runtime!
 	 */
 
-	for (TSubclassOf<UGameplayAbility> Ability : StartupAbilities)
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
 	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability, 1);
-		// GiveAbility(AbilitySpec);
-		GiveAbilityAndActivateOnce(AbilitySpec);
+		/**
+		 * While looping through abilities, if any are derived from AuraGameplayAbility, get the StartupInputTag and
+		 *  add to the DynamicAbilityTags. Then, give the ability.
+		 */
+		
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		if (const UAuraGameplayAbility* AuraAbility = Cast<UAuraGameplayAbility>(AbilitySpec.Ability))
+		{
+			AbilitySpec.DynamicAbilityTags.AddTag(AuraAbility->StartupInputTag);
+			GiveAbility(AbilitySpec);
+		}
 	}
 }
 
