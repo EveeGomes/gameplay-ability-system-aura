@@ -13,6 +13,7 @@ struct FInputActionValue;
 class IEnemyInterface;
 class UAuraInputConfig;
 class UAuraAbilitySystemComponent;
+class USplineComponent;
 
 /**
  * 
@@ -76,4 +77,45 @@ private:
 
 	/* It casts only once by checking if it's null (which will be the first time), and then casting to AuraASC. */
 	UAuraAbilitySystemComponent* GetASC();
+
+	/* Click to move related */
+	/**
+	 * This mechanic was inspired by the Top-Down Template. However, things will be a bit different in this project because
+	 *  the template one implemented the short mouse press movement with a function that isn't replicated, so in the client
+	 *  side it doesn't work.
+	 *  For this project we'll implement the Click To Move using AddMovementInput() method and a spline for paths where an
+	 *  obstacle needs to be avoided.
+	 *
+	 * FollowTime:
+	 *  used to keep track if how much time the mouse button has been pressed before is released. That's so we know if it
+	 *  was a short press. That variable holds the value that represents the amount of time we've been following the mouse
+	 *  cursor (if we're holding the LMB down, we're following the cursor - the location under the mouse cursor!). So, as
+	 *  we're following, we'll increment this variable!
+	 *
+	 * ShortPressThreshold
+	 *  know the threshold of a short press - how long the LMB (mouse cursor) has been holding down before releasing it.
+	 *
+	 * bAutoRunning
+	 *  will be set to true if a short press happened, which is when we need to generate path points and a spline for a
+	 *  smooth movement. As soon as it's true, AddMovementInput() will be called every single frame.
+	 *
+	 * AutoRunAcceptanceRadius 
+	 *  When auto running, each and every frame we'll be getting closer and closer to our destination, and at a certain
+	 *  point we need to stop the movement. So this variable represents a parameter, that we can change as we need/want,
+	 *  of how close to the destination we should be to stop moving.
+	 *
+	 * Spline
+	 *  it's a component that allows us to create a smooth curve out of some FVector world locations. It'll be constructed
+	 *  on this class constructor, but its points will be set as we generate paths.
+	 */
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.f;
+	float ShortPressThreshold = 0.f;
+	bool bAutoRunning = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
 };

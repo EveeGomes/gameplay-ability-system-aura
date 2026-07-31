@@ -3,19 +3,24 @@
 
 #include "Player/AuraPlayerController.h"
 
-/** Input */
+/* Input */
 #include "EnhancedInputSubsystems.h"
 #include "Input/AuraInputComponent.h"
 
-/** Interfaces */
+/* Interfaces */
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Interaction/EnemyInterface.h"
 
+/* Other Components */
+#include "Components/SplineComponent.h"
+
 AAuraPlayerController::AAuraPlayerController()
 {
-   /** Changes will be sent to all clients in the same server. It'll be addressed better later.*/
+   /* Changes will be sent to all clients in the same server. It'll be addressed better later.*/
    bReplicates = true;
+
+   Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
