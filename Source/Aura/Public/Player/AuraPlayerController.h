@@ -108,11 +108,15 @@ private:
 	 * Spline
 	 *  it's a component that allows us to create a smooth curve out of some FVector world locations. It'll be constructed
 	 *  on this class constructor, but its points will be set as we generate paths.
+	 *
+	 * bTargeting
+	 *  this boolean will be used to keep track of whether we're targeting something.
 	 */
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0.f;
 	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
+	bool bTargeting = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius = 50.f;

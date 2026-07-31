@@ -249,7 +249,18 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-   //GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+   /**
+    * The variable we use to check whether we're hovering over an enemy, ThisActor, is always set to a value that can be
+    *  either null or an enemy we've hovered. That variable we can use to distinguish whether we're clicking the LMB to
+    *  move or to activate (or try to) an ability.
+    *  So bTargeting will be set to true if ThisActor has a valid value, and false if it's null.
+    *
+    * bAutoRunning is set to false at the beginning because this function is called as soon as a key/button is pressed, so
+    *  we don't know yet if it's a short press or not until we RELEASE the key/button!
+    */
+
+   bTargeting = ThisActor ? true : false;
+   bAutoRunning = false;
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
