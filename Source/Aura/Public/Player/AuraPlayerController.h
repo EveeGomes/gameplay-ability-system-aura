@@ -94,6 +94,7 @@ private:
 	 *
 	 * ShortPressThreshold
 	 *  know the threshold of a short press - how long the LMB (mouse cursor) has been holding down before releasing it.
+	 *  It should be initialized to a non-zero value since it's in seconds. 
 	 *
 	 * bAutoRunning
 	 *  will be set to true if a short press happened, which is when we need to generate path points and a spline for a
@@ -110,7 +111,7 @@ private:
 	 */
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0.f;
-	float ShortPressThreshold = 0.f;
+	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
 
 	UPROPERTY(EditDefaultsOnly)
