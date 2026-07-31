@@ -14,6 +14,8 @@
 
 /* Other Components */
 #include "AuraGameplayTags.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "Components/SplineComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
@@ -271,8 +273,65 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-   if (GetASC() == nullptr) return;
-   GetASC()->AbilityInputTagReleased(InputTag);
+   /**
+    * We'll do similarly to TagHeld since we need to check if we're using the LMB or not. That check is done so we can
+    *  activate the abilities, otherwise proceed with the LMB logic.
+    *
+    * Here in TagReleased we want to check the FollowTime so we know if it was a short press or not. So if it's less or
+    *  equal to the ShortPressThreshold we've set, we want to find a path, a navigation path = a set of points to follow.
+    *  For that we'll use the function UNavigationSystemV1::FindPathToLocationSynchronously()! That function returns a
+    *  pointer to a UNavigationPath, which has a member .PathPoints that consists of a TArray of FVectors!! That's what
+    *  we need to generate our spline points!!!
+    *  In Addition to those spline points, we'll draw some spheres so we can visualize them!
+    *  We need to add NavigationSystem to Aura.Build.cs in PrivateDependencyModuleNames (private because we're using it
+    *  here in a .cpp file, a private file).
+    *
+    * So for creating the spline points:
+    *  - first we need to clear any points that existed before!
+    *  - then we'll loop through the points from the NavPath and add them to the spline!
+    *  - to help visualize them for testing we'll draw some spheres!
+    * Another thing to do is set bAutoRunning to true, since this is the bevahior of "auto running".
+    * We also need to reset FollowTime to zero and bTargeting to false at the end of the whole else statement!
+    *
+    * In the editor we must add a Nav Mesh Bounds Volume for this whole logic to work!!!
+    */
+   
+   if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+   {
+      if (GetASC())
+      {
+         GetASC()->AbilityInputTagReleased(InputTag);
+      }
+
+      return;
+   }
+   
+   if (bTargeting)
+   {
+      if (GetASC())
+      {
+         GetASC()->AbilityInputTagHeld(InputTag);
+      }
+   }
+   else
+   {
+      APawn* ControlledPawn = GetPawn();
+      if (FollowTime <= ShortPressThreshold && ControlledPawn)
+      {
+         if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
+         {
+            Spline->ClearSplinePoints();
+            for (const FVector& PointLoc : NavPath->PathPoints)
+            {
+               Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
+               DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+            }
+            bAutoRunning = true;
+         }
+      }
+      FollowTime = 0.f;
+      bTargeting = false;
+   }
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
