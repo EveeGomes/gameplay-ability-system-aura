@@ -36,7 +36,46 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
    Super::PlayerTick(DeltaTime);
    CursorTrace();
 
+   AutoRun();
+}
 
+void AAuraPlayerController::AutoRun()
+{
+   /**
+   * Here we'll implement the auto running!
+   * So after getting the controlled pawn, we need to find the closest spline point to the player character, because
+   *  the player will not always be exactly on the spline.
+   *  Then, we should find the direction of that location in order to know what direction to move the controlled pawn!
+   *  With that direction we can call AddMovementInput and pass it over.
+   * After that, we should check if the player is close to the destination. That's so we can stop the movement a little
+   *  bit before, which is why we have the AutoRunAcceptanceRadius!
+   *  So first we find the distance between the CachedDestination and the LocationOnSpline.
+   *  Then we check if that distance is less or equal than the acceptance radius and set bAutoRunning to false to stop
+   *  the movement!
+   *
+   * In the editor a bug was happening whenever we clicked on the mesh used to test this function: because the mesh collision
+   *  was blocking the visibility channel used for the mouse cursor trace, we'd never get to the destination point, although
+   *  we have the the end point so the player would run forever. To fix it, just change the mesh collision to ignore the
+   *  visibility channel!
+   *  Similar bug is still happening if we click on a space that is outside de nav mesh volume (where it ignores in order
+   *  to avoid that path), like on the base of the pilar.
+   *  A way to fix it is to set the CachedDestination to be the last point in the spline!
+   */
+
+   if (!bAutoRunning) return;
+
+   if (APawn* ControlledPawn = GetPawn())
+   {
+      const FVector LocationOnSpline = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+      const FVector Direction = Spline->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
+      ControlledPawn->AddMovementInput(Direction);
+   
+      const float DistanceToDestination = (LocationOnSpline - CachedDestination).Length();
+      if (DistanceToDestination <= AutoRunAcceptanceRadius)
+      {
+         bAutoRunning = false;
+      }
+   }
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -293,7 +332,8 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
     * Another thing to do is set bAutoRunning to true, since this is the bevahior of "auto running".
     * We also need to reset FollowTime to zero and bTargeting to false at the end of the whole else statement!
     *
-    * In the editor we must add a Nav Mesh Bounds Volume for this whole logic to work!!!
+    * In the editor we must add a Nav Mesh Bounds Volume for this whole logic to work!!
+    * We also need to toggle on the option "Allow Client Side Navigation" under Project Setting -> Navigation System.
     */
    
    if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
@@ -326,6 +366,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
                Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
                DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
             }
+            CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1]; // avoid run forever bug in AutoRun()
             bAutoRunning = true;
          }
       }
