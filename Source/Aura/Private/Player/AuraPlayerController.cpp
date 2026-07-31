@@ -277,8 +277,56 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-   if (GetASC() == nullptr) return;
-   GetASC()->AbilityInputTagHeld(InputTag);
+   /**
+    * Similar to AbilityInputTagPressed() we should check for the InputTag_LMB. However, here we should proceed with the
+    *  old implementation whenever IT'S NOT InputTag_LMB, which is to try and activate an ability associated with InputTag.
+    *  At the end we should return (whether ASC is valid or not!).
+    *
+    * Now, when it's InputTag_LMB, it means we're holding the LMB down, and in that case we need to know if we're targeting
+    *  before proceeding. If so, it means we want to attack, ie activate the ability! Otherwise we're concern with the
+    *  move behavior!
+    *  - so we gotta increment the FollowTime with the delta seconds;
+    *  - get the world location, which is the destination we want to move towards! (ps: it's ok for a line trace to use
+    *    .Location or .HitPoint but if it was a sphere that would be different because that could mean the surface or the
+    *    center of the sphere!).
+    *  - then, we think about calling AddMovementInput. So, first we find the vector from the controlled pawn to the
+    *    CachedDestination and normalize it to get the direction.
+    *    Finally we can use that direction when calling AddMovementInput.
+    */
+   
+   if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+   {
+      if (GetASC())
+      {
+         GetASC()->AbilityInputTagHeld(InputTag);
+      }
+
+      return;
+   }
+   
+   if (bTargeting)
+   {
+      if (GetASC())
+      {
+         GetASC()->AbilityInputTagHeld(InputTag);
+      }
+   }
+   else
+   {
+      FollowTime += GetWorld()->GetDeltaSeconds();
+
+      FHitResult Hit;
+      if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit))
+      {
+         CachedDestination = Hit.Location;
+      }
+
+      if (APawn* ControlledPawn = GetPawn())
+      {
+         const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+         ControlledPawn->AddMovementInput(WorldDirection);
+      }
+   }
 }
 
 UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
