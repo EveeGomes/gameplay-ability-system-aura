@@ -13,6 +13,7 @@
 #include "Interaction/EnemyInterface.h"
 
 /* Other Components */
+#include "AuraGameplayTags.h"
 #include "Components/SplineComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
@@ -257,10 +258,15 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
     *
     * bAutoRunning is set to false at the beginning because this function is called as soon as a key/button is pressed, so
     *  we don't know yet if it's a short press or not until we RELEASE the key/button!
+    *
+    * So, all the logic above should happen only if InputTag is the LMB!
     */
 
-   bTargeting = ThisActor ? true : false;
-   bAutoRunning = false;
+   if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+   {
+      bTargeting = ThisActor ? true : false;
+      bAutoRunning = false;
+   }
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
