@@ -216,7 +216,6 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
-
    /** 
    * Get the hit result under the cursor. This is something that the PlayerController class inheritly has the ability to do.
    * We'll call a method that do that and takes a trace channel, which we'll pass the visibility channel. The bTraceComplex will be
@@ -246,7 +245,7 @@ void AAuraPlayerController::CursorTrace()
    * E. Both actors are valid, and are the same actor
    *     - Do nothing.
    */
-   FHitResult CursorHit;
+
    GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
    if (!CursorHit.bBlockingHit) return;
 
@@ -415,10 +414,9 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
    {
       FollowTime += GetWorld()->GetDeltaSeconds();
 
-      FHitResult Hit;
-      if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit))
+      if (CursorHit.bBlockingHit)
       {
-         CachedDestination = Hit.Location;
+         CachedDestination = CursorHit.Location;
       }
 
       if (APawn* ControlledPawn = GetPawn())
