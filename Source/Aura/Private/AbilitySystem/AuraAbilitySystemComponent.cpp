@@ -8,9 +8,25 @@
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
-	// Bind to a delegate. We use AddObject() because it's not a dynamic delegate (we can see by checking its declaration)
-	// Now EffectApplied is a callback that'll be called in response to any effect that gets applied to this ASC.
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
+	/**
+	 * Bind to a delegate. We use AddObject() because it's not a dynamic delegate (we can see by checking its declaration)
+	 * Now, EffectApplied is a callback that'll be called in response to any effect that gets applied to this ASC.
+	 *
+	 * There's an issue with using OnGameplayEffectAppliedDelegateToSelf: it its called just on server. So when testing
+	 *  with 2 players on PIE, the client version isn't getting the message on screen when picking up a potion.
+	 *  To fix that: we can take the callback &UAuraAbilitySystemComponent::EffectApplied and make it an RPC, or more
+	 *  specifically a client RPC, it'll be called on the server but also exececuted on the owning client. Ie client RPCs
+	 *  are designed to be called on the server and executed on the client!! If the call is on the server owned ASC, the
+	 *  hosting player then the client RPC will only be called on the server and it won't be replicated down to the owning
+	 *  client as the owning client is on the server already!
+	 *  - So on .h we add a UPROPERTY and add keywords:
+	 *   - Client: so it's a client RPC
+	 *   - Reliable: it's guaranteed it reaches the client.
+	 *  - Another convension is to prefix the callback with Client
+	 *  - And it also needs an "_Implementation" added to the end of the name here on .cpp file!
+	 */
+
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::ClientEffectApplied);
 }
 
 void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
@@ -101,7 +117,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 	}
 }
 
-void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
+void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
                                                 const FGameplayEffectSpec& EffectSpec,
                                                 FActiveGameplayEffectHandle ActiveEffectHandle)
 {
