@@ -244,6 +244,8 @@ void AAuraPlayerController::CursorTrace()
    *     - Unhighlight LastActor, and Highlight ThisActor.
    * E. Both actors are valid, and are the same actor
    *     - Do nothing.
+   * L108 - refactoring the logic above:
+   *  All we need to know is whether LastActor and ThisActor are different, and then if they're valid!
    */
 
    GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
@@ -252,39 +254,10 @@ void AAuraPlayerController::CursorTrace()
    LastActor = ThisActor;
    ThisActor = CursorHit.GetActor();
 
-   if (LastActor == nullptr) // explicitly stating if that pointer is null
+   if (LastActor != ThisActor)
    {
-      if (ThisActor != nullptr)
-      {
-         // Case B
-         ThisActor->HighlightActor();
-      }
-      else
-      {
-         // Case A - both are null, do nothing
-         // unnecessary else, but here to make it easier to visualize and understand at first
-      }
-   }
-   else // LastActor is valid
-   {
-      if (ThisActor == nullptr)
-      {
-         // Case C
-         LastActor->UnHighlihtActor();
-      }
-      else // both actors are valid
-      {
-         if (LastActor != ThisActor)
-         {
-            // Case D
-            LastActor->UnHighlihtActor();
-            ThisActor->HighlightActor();
-         }
-         else
-         {
-            // Case E - do nothing
-         }
-      }
+      if (LastActor) LastActor->UnHighlihtActor();
+      if (ThisActor) ThisActor->HighlightActor();
    }
 }
 
