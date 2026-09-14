@@ -51,7 +51,7 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	/**
-	 * Sockets names.
+	 * Sockets names. Set in BP.
 	 * Used to retrieve data like a weapon socket location.
 	 */
 	UPROPERTY(EditAnywhere, Category = "Combat")

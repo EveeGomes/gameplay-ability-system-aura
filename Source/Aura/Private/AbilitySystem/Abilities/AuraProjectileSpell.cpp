@@ -4,6 +4,7 @@
 #include "AbilitySystem/Abilities/AuraProjectileSpell.h"
 
 #include "Actor/AuraProjectile.h"
+#include "Interaction/CombatInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -40,15 +41,20 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	 *	inherits from that interface, so the idea is to add a function that returns a socket location, then derived
 	 *	classes can override and have their own implementation.
 	 */
-
-	FTransform SpawnTransform;
-	GetWorld()->SpawnActorDeferred<AAuraProjectile>(
-		ProjectileClass,
-		SpawnTransform,
-		GetOwningActorFromActorInfo(),
-		Cast<APawn>(GetOwningActorFromActorInfo()),
-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn
-	);
-
 	
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
+	if (CombatInterface)
+	{
+		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(SocketLocation);
+
+		GetWorld()->SpawnActorDeferred<AAuraProjectile>(
+        	ProjectileClass,
+        	SpawnTransform,
+        	GetOwningActorFromActorInfo(),
+        	Cast<APawn>(GetOwningActorFromActorInfo()),
+        	ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+        );
+	}
 }
