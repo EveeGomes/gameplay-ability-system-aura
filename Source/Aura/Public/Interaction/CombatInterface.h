@@ -31,4 +31,9 @@ public:
 	*  we have to access the PlayerState: AuraPlayerState where the Level lives.
 	*/
 	virtual int32 GetPlayerLevel();
+
+	/**
+	 * Overriden by derived classes to return a socket location that can be used later to spawn an AuraProjectile.
+	 */
+	virtual FVector GetCombatSocketLocation();
 };

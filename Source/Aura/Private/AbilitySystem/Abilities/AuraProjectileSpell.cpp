@@ -36,6 +36,9 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	 *  weapon. But to do that we'd have to cast to AuraCharacter (because that's where we'd like to spawn it), however
 	 *  that's not ideal - have this class depended on a AuraCharacter class. The idea is to be able to get the socket
 	 *  location from the weapon of whomever owns this. Therefore, we'd need an interface function for this.
+	 *	There's an interface, ICombatInterface that is used by both AuraCharacter and enemies. The AuraCharacterBase
+	 *	inherits from that interface, so the idea is to add a function that returns a socket location, then derived
+	 *	classes can override and have their own implementation.
 	 */
 
 	FTransform SpawnTransform;
@@ -46,5 +49,6 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		Cast<APawn>(GetOwningActorFromActorInfo()),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn
 	);
+
 	
 }
