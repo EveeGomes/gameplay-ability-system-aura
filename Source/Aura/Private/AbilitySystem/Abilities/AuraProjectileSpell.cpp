@@ -33,6 +33,8 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	 *  hits something and applies a GE, which in other words we're going to set a GE or GE spec on that actor. Then, if
 	 *  we're going to set variables and things on the actor to be spawned, we can handle having all things set by the
 	 *  time the actor has finished being spawned. For that we should use SpawnActorDeferred.
+	 *  By using that method, we need to actually finish spawning, and we do that by calling another method on the return
+	 *  object from SpawnActorDeferred(). We have things done that way so we can set things in between these two steps.
 	 * The idea for the SpawnTransform values is that the projectile should spawn at the tip of the staff that's Aura's
 	 *  weapon. But to do that we'd have to cast to AuraCharacter (because that's where we'd like to spawn it), however
 	 *  that's not ideal - have this class depended on a AuraCharacter class. The idea is to be able to get the socket
@@ -48,13 +50,18 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
+		// TODO: Set the Projectile Rotation.
 
-		GetWorld()->SpawnActorDeferred<AAuraProjectile>(
+		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
         	ProjectileClass,
         	SpawnTransform,
         	GetOwningActorFromActorInfo(),
         	Cast<APawn>(GetOwningActorFromActorInfo()),
         	ESpawnActorCollisionHandlingMethod::AlwaysSpawn
         );
+
+		// TODO: Give the Projectile a Gameplay Effect Spec for causing Damage. 
+		
+		Projectile->FinishSpawning(SpawnTransform);
 	}
 }
