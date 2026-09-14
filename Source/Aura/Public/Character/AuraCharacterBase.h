@@ -50,6 +50,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
+	/**
+	 * Sockets names.
+	 * Used to retrieve data like a weapon socket location.
+	 */
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponTipSocketName;
+
+	virtual FVector GetCombatSocketLocation() override;
+
 	/** 
 	* Add pointers to store the AbilitySystemComponent and AttributeSet in this Base class for all children inheret them. However, not all
 	*  children will construct them. For example we'll construct and own those in the enemy class, but for the playe controlled character
