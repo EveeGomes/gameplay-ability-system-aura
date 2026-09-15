@@ -12,7 +12,10 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
                                            const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
 
+void UAuraProjectileSpell::SpawnProjectile()
+{
 	/**
 	 * The idea is to spawn the projectile on the server instead of locally, so it's a replicated actor.
 	 * As the server spawns it, then the server will be in charge to move it, handle its location and more, while the
@@ -23,8 +26,8 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	 *  HasAuthority asks for an arg, a pointer of type FGameplayAbilityActivationInfo. Since we have a param passed to
 	 *  this function we're in, we can use it. But as it's not a pointer, we can send the address of ActivationInfo.
 	 */
-
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+	
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
 
 	/**
