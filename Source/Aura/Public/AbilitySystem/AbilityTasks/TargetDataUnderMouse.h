@@ -52,4 +52,12 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FMouseTargetDataSignature ValidData;
+
+private:
+	/**
+	 * As soon as CreateTargetDataUnderMouse is executed, the Activate function will be called. So, we'll override this
+	 *  function.
+	 */
+	virtual void Activate() override;
+	
 };
