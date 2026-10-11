@@ -2,7 +2,6 @@
 
 
 #include "AbilitySystem/AbilityTasks/TargetDataUnderMouse.h"
-#include "Character/AuraCharacter.h"
 
 UTargetDataUnderMouse* UTargetDataUnderMouse::CreateTargetDataUnderMouse(UGameplayAbility* OwningAbility)
 {
@@ -18,18 +17,15 @@ void UTargetDataUnderMouse::Activate()
 	 * All we need here is to get data and then broadcast ValidData.
 	 * We need the mouse hit location and broadcast that.
 	 */
-
-	const AAuraCharacter* AuraCharacter = Cast<AAuraCharacter>(GetAvatarActor());
-	if (AuraCharacter)
+	
+	APlayerController* PlayerController = Ability->GetCurrentActorInfo()->PlayerController.Get();
+	if (PlayerController)
 	{
-		const APlayerController* PlayerController = Cast<APlayerController>(AuraCharacter->GetController());
-		if (PlayerController)
-		{
-			FHitResult HitResult;
-			PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
-			if (!HitResult.bBlockingHit) return;
+		FHitResult HitResult;
+		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+		if (!HitResult.bBlockingHit) return;
 
-			ValidData.Broadcast(HitResult.Location);
-		}
+		ValidData.Broadcast(HitResult.Location);
 	}
+
 }
