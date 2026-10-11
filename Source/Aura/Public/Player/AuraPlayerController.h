@@ -88,7 +88,7 @@ private:
 	 *  obstacle needs to be avoided.
 	 *
 	 * FollowTime:
-	 *  used to keep track if how much time the mouse button has been pressed before is released. That's so we know if it
+	 *  used to keep track of how much time the mouse button has been pressed before being released. That's so we know if it
 	 *  was a short press. That variable holds the value that represents the amount of time we've been following the mouse
 	 *  cursor (if we're holding the LMB down, we're following the cursor - the location under the mouse cursor!). So, as
 	 *  we're following, we'll increment this variable!
