@@ -16,6 +16,9 @@ void UTargetDataUnderMouse::Activate()
 	 *
 	 * All we need here is to get data and then broadcast ValidData.
 	 * We need the mouse hit location and broadcast that.
+	 *
+	 * The following implementation has a limitation of not sending data up to the server. IE HitResult is empty and
+	 *  when ValidData broadcasts there's no location to send!
 	 */
 	
 	APlayerController* PlayerController = Ability->GetCurrentActorInfo()->PlayerController.Get();
