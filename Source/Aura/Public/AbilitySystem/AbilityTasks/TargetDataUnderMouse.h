@@ -18,7 +18,7 @@
  */
 
 // One param to broadcast the value of the mouse cursor location
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature, const FVector&, Data);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature, const FGameplayAbilityTargetDataHandle&, DataHandle);
 
 UCLASS()
 class AURA_API UTargetDataUnderMouse : public UAbilityTask
@@ -59,5 +59,8 @@ private:
 	 *  function.
 	 */
 	virtual void Activate() override;
+
+	/** Call this function if we're locally controlled (client) */
+	void SendMouseCursorData();
 	
 };
