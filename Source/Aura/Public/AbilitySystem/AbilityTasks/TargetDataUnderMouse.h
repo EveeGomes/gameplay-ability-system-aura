@@ -62,5 +62,13 @@ private:
 
 	/** Call this function if we're locally controlled (client) */
 	void SendMouseCursorData();
+
+	/**
+	 * Called in response to receiving TargetData.
+	 * TargetDataSetDelegate() is going to broadcast two things: the TargetDataHandle, and the ActivationTag associated
+	 *  with it (even if we send an empty tag to the server, that tag's still going to come through).
+	 *  Therefore, this function needs to have both of these params so we can bind to that delegate (in Activate()).
+	 */
+	void OnTargetDataReplicatedCallback(const FGameplayAbilityTargetDataHandle& DataHandle, FGameplayTag ActivationTag);
 	
 };

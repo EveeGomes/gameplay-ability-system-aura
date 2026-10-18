@@ -26,7 +26,26 @@ void UTargetDataUnderMouse::Activate()
 	}
 	else
 	{
-		//TODO: We are on the server, so listen for target data.
+		/**
+		 * We are on the server, so listen for target data.
+		 * When the Target Data reaches the server, there's a delegate broadcast (as we saw).
+		 *  We can get that delegate through the ASC.
+		 * So as soon as Activate() is called on the server, there will be this bind between this delegate and the
+		 *  callback. But what if we're too late and the target data has already been sent? And the delegate has already
+		 *  been broadcast? Well in that case we should call the callback anyways!
+		 *  So, there's a way to check that by calling the TargetDataDelegate if it already received target
+		 *  data. We use CallReplicatedTargetDataDelegatesIfSet(...) which sends us a bool that tells us if TargetDataSet
+		 *  has already been sent; and if not, we'll tell the server we're still waiting for it by calling
+		 *  SetWaitingOnRemotePlayerData().
+		 */
+		const FGameplayAbilitySpecHandle SpecHandle = GetAbilitySpecHandle();
+		const FPredictionKey ActivationPredictionKey = GetActivationPredictionKey(); /*the activation prediction key since it says "Ability-Original-"*/  
+		AbilitySystemComponent.Get()->AbilityTargetDataSetDelegate(SpecHandle, ActivationPredictionKey).AddUObject(this, &UTargetDataUnderMouse::OnTargetDataReplicatedCallback);
+		const bool bCalledDelegate = AbilitySystemComponent.Get()->CallReplicatedTargetDataDelegatesIfSet(SpecHandle, ActivationPredictionKey);
+		if (!bCalledDelegate)
+		{
+			SetWaitingOnRemotePlayerData();
+		}
 	}
 }
 
@@ -79,4 +98,10 @@ void UTargetDataUnderMouse::SendMouseCursorData()
 		// Broadcast the data handle and from that get the location (and other things if needed)
 		ValidData.Broadcast(DataHandle);
 	}
+}
+
+void UTargetDataUnderMouse::OnTargetDataReplicatedCallback(const FGameplayAbilityTargetDataHandle& DataHandle,
+	FGameplayTag ActivationTag)
+{
+	
 }
