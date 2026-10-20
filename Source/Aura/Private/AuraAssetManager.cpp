@@ -3,6 +3,7 @@
 
 #include "AuraAssetManager.h"
 #include "AuraGameplayTags.h"
+#include "AbilitySystemGlobals.h"
 
 UAuraAssetManager& UAuraAssetManager::Get()
 {
@@ -24,4 +25,10 @@ void UAuraAssetManager::StartInitialLoading()
 	Super::StartInitialLoading();
 
 	FAuraGameplayTags::InitializeNativeGameplayTags();
+	
+	/**
+	 * If we want to use Target Data (like we do in TargetDataUnderMouse), we must call InitGlobalData() which
+	 *  initializes some things including the Target Data Script Struct Cache.
+	 */
+	UAbilitySystemGlobals::Get().InitGlobalData();
 }
