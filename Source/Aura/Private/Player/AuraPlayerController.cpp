@@ -319,15 +319,16 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
       return;
    }
-   
-   if (bTargeting)
+
+   // Since we added the shift action as well, we shall tell the ASC the mouse has been released regardless of holding the shift key
+   if (GetASC())
    {
-      if (GetASC())
-      {
-         GetASC()->AbilityInputTagHeld(InputTag);
-      }
+      GetASC()->AbilityInputTagReleased(InputTag);
    }
-   else
+
+   // If we release the mouse button, should we still check for a short press to stop moving?
+   // That should happen only if we're not targeting and not holding the shift key down
+   if (!bTargeting && !bShiftKeyDown)
    {
       const APawn* ControlledPawn = GetPawn();
       if (FollowTime <= ShortPressThreshold && ControlledPawn)
@@ -377,7 +378,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
       return;
    }
    
-   if (bTargeting)
+   if (bTargeting || bShiftKeyDown)
    {
       if (GetASC())
       {
