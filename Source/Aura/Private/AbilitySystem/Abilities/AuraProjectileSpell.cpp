@@ -14,7 +14,7 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UAuraProjectileSpell::SpawnProjectile()
+void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	/**
 	 * The idea is to spawn the projectile on the server instead of locally, so it's a replicated actor.
@@ -51,9 +51,19 @@ void UAuraProjectileSpell::SpawnProjectile()
 	if (CombatInterface)
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
+		/**
+		 * Get an FVector that goes from the SocketLocation to the ProjectileTargetLocation. Then, find the rotation.
+		 *  This makes the spawning happens on the same rotation as where the mouse was clicked!
+		 *  To make the projectile fly parallel to the ground, we should zero out the pitch. Another option if we want
+		 *  is allow gravity to take effect; so, we should add some pitch, say 25 or 35 degrees, and let gravity do its
+		 *  job (we'd launch the projectile a little up into the air and gravity brings it back down).
+		 */
+		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+		Rotation.Pitch = 0.f;
+		
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-		// TODO: Set the Projectile Rotation.
+		SpawnTransform.SetRotation(Rotation.Quaternion());
 
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
         	ProjectileClass,
