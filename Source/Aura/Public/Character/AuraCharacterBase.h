@@ -30,9 +30,6 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
-	// UFUNCTION(BlueprintCallable)
-	// virtual void SetFacingWarpTarget(const FVector& FacingTarget);
-
 protected:
 	/** 
 	* Add a Skeletal Mesh component to this base class so both children can inheret and both can have a weapon.

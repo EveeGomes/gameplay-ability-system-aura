@@ -7,7 +7,7 @@
 #include "CombatInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI, Blueprintable) // Blueprintable = BPs can implement it
+UINTERFACE(MinimalAPI, BlueprintType)
 class UCombatInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -37,6 +37,7 @@ public:
 	 */
 	virtual FVector GetCombatSocketLocation();
 
+	// Since we're using 'BlueprintImplementableEvent' we won't use 'virtual' as this can only be implemented in BP
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void SetFacingWarpTarget(const FVector& FacingTarget);
+	void UpdateFacingTarget(const FVector& Target);
 };

@@ -26,12 +26,6 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-// void AAuraCharacterBase::SetFacingWarpTarget(const FVector& FacingTarget)
-// {
-// 	// ICombatInterface::SetFacingWarpTarget(FacingTarget);
-// 	
-// }
-
 FVector AAuraCharacterBase::GetCombatSocketLocation()
 {
 	check(Weapon);
