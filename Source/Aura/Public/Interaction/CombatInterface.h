@@ -7,7 +7,7 @@
 #include "CombatInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, Blueprintable) // Blueprintable = BPs can implement it
 class UCombatInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -36,4 +36,7 @@ public:
 	 * Overriden by derived classes to return a socket location that can be used later to spawn an AuraProjectile.
 	 */
 	virtual FVector GetCombatSocketLocation();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetFacingWarpTarget(const FVector& FacingTarget);
 };
